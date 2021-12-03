@@ -66,7 +66,94 @@ class ZeroDCE(tf.keras.Model):
         le_img = inputs
         for a_map in a_maps_splited:
             le_img = le_img + a_map * (tf.square(le_img) - le_img)
-        return le_img
+        return le_img, a_maps
+    
+    def compile(
+        self,
+        optimizer: tf.keras.optimizers.Optimizer,
+        spatial_consistency_loss: tf.keras.losses.Loss,
+        exposure_control_loss: tf.keras.losses.Loss,
+        color_constancy_loss: tf.keras.losses.Loss,
+        illumination_smoothness_loss: tf.keras.losses.Loss,
+        loss_weights: dict = {
+            'spatial_consistency_w': 1.0,
+            'exposure_control_w': 10.0,
+            'color_constancy_w': 5.0,
+            'illumination_smoothness_w': 200.0
+        },
+        **kwargs
+    ):
+        super(ZeroDCE, self).compile(**kwargs)
+        self.optimizer = optimizer
+        self.spatial_consistency_loss = spatial_consistency_loss
+        self.exposure_control_loss = exposure_control_loss
+        self.color_constancy_loss = color_constancy_loss
+        self.illumination_smoothness_loss = illumination_smoothness_loss
+        self.loss_weights = loss_weights
+    
+    def compute_losses(self, input_img:tf.Tensor, enhanced_img: tf.Tensor, a_maps: tf.Tensor)-> dict:
+        '''
+        Compute all zero reference DCE losses
+        args:
+            input_img: tf.Tensor, input image
+            enhanced_img: tf.Tensor, enhanced image
+            a_maps: tf.Tensor, Alpha maps of enhanced image
+        return:
+            dict, loss dictionary
+        '''
+        l_spa = self.loss_weights['spatial_consistency_w'] * self.spatial_consistency_loss(input_img,enhanced_img)
+        l_exp = self.loss_weights['exposure_control_w'] * self.exposure_control_loss(enhanced_img)
+        l_col = self.loss_weights['color_constancy_w'] * self.color_constancy_loss(enhanced_img)
+        l_ill = self.loss_weights['illumination_smoothness_w'] * self.illumination_smoothness_loss(a_maps)
+
+        total_loss = l_spa + l_exp + l_col + l_ill
+
+        return {
+            'total_loss': total_loss,
+            'spatial_consistency_loss': l_spa,
+            'exposure_control_loss': l_exp,
+            'color_constancy_loss': l_col,
+            'illumination_smoothness_loss': l_ill
+        }
+
+    @tf.function
+    def train_step(self, inputs: tf.Tensor) -> dict:
+        '''
+        Forward pass, calculate total loss, and calculate gradients with respect to loss.
+        args:
+            inputs: tf.Tensor, Tensor of shape (batch_size, IMG_H, IMG_W, IMG_C)
+        returns:
+            loss: tf.Tensor, Tensor of shape (batch_size, 1)
+        '''
+        with tf.GradientTape() as tape:
+            enhanced_img, a_maps = self(inputs)
+            losses = self.compute_losses(inputs, enhanced_img, a_maps)
+        
+        # Calculate gradients
+        gradients = tape.gradient(losses['total_loss'], self.trainable_variables)
+        # Backpropagate gradients to update weights.
+        self.optimizer.apply_gradients(zip(gradients, self.trainable_variables))
+
+        return losses
+    
+    @tf.function
+    def test_step(self, inputs: tf.Tensor)-> dict:
+        '''
+        Forward pass, calculate total loss.
+        args:
+            inputs: tf.Tensor, Tensor of shape (batch_size, IMG_H, IMG_W, IMG_C)
+        returns:
+            dict, validation loss dictionary
+        '''
+        enahncened_img, a_maps = self(inputs)
+        val_losses = self.compute_losses(inputs, enahncened_img, a_maps)
+        return {
+            'val_loss': val_losses['total_loss'],
+            'val_spatial_consistency_loss': val_losses['spatial_consistency_loss'],
+            'val_exposure_control_loss': val_losses['exposure_control_loss'],
+            'val_color_constancy_loss': val_losses['color_constancy_loss'],
+            'val_illumination_smoothness_loss': val_losses['illumination_smoothness_loss']
+        }
 
     def summary(self, plot:bool = False):
         x = tf.keras.Input(shape=(self.IMG_H, self.IMG_W, self.IMG_C))
@@ -88,8 +175,9 @@ class ZeroDCE(tf.keras.Model):
 
 if __name__ == "__main__":
     x = tf.random.normal([1, 400, 600, 3])
-    model = ZeroDCE(filters=32, iteration=5)
+    model = ZeroDCE(filters=32, iteration=1)
     tf.print(model.summary(plot=True))
     tf.print(model.get_config())
-    y = model(x)
+    y,a_maps = model(x)
     tf.print(y.shape)
+    tf.print(a_maps.shape)    

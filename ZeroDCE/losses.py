@@ -26,14 +26,14 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 import tensorflow as tf
 
+# Highly Referenced from the orignal Pytorch Implementation of the ZeroDCE: https://github.com/Li-Chongyi/Zero-DCE_extension
+
 class SpatialConsistencyLoss(tf.keras.losses.Loss):
     '''
     The spatial consistency loss encourages spatial coherence of the enhanced image through
     preserving the difference of neighboring regions between the input
     image and its enhanced version.
 
-    Highly Refereced from the orignal Pytorch Implementation of the ZeroDCE:
-    https://github.com/Li-Chongyi/Zero-DCE_extension
     '''
     def __init__(self, **kwargs):
         super(SpatialConsistencyLoss, self).__init__(**kwargs)
@@ -143,7 +143,7 @@ class ColorConstancyLosss(tf.keras.losses.Loss):
         Drb = tf.square(mr - mb)
         Dbg = tf.square(mb - mg)
 
-        return tf.sqrt(tf.square(Drg) + tf.square(Drb) + tf.square(Dbg))
+        return tf.squeeze(tf.sqrt(tf.square(Drg) + tf.square(Drb) + tf.square(Dbg)))
     
     def get_config(self):
         return super(ColorConstancyLosss, self).get_config()
@@ -152,3 +152,69 @@ class ColorConstancyLosss(tf.keras.losses.Loss):
     def from_config(cls, config):
         return cls(**config)
 
+class IlluminationSmoothnessLoss(tf.keras.losses.Loss):
+    '''
+    To preserve the monotonic relations between 
+    neighboring pixels, the author of the paper added an illumination
+    smoothness loss to each curve parameter map A.
+    '''
+    def __init__(self, **kwargs):
+        super(IlluminationSmoothnessLoss, self).__init__(**kwargs)
+    
+    def __call__(self, alpha_map: tf.Tensor)-> tf.Tensor:
+        '''
+        Args:
+            alpha_map: The curve parameter map tensor.
+        Returns:
+            The illumination smoothness loss.
+        '''
+        batch_size = tf.shape(alpha_map)[0]
+        h_alpha_map = tf.shape(alpha_map)[1]
+        w_alpha_map = tf.shape(alpha_map)[2]
+
+        count_h = (tf.shape(alpha_map)[2] - 1) * tf.shape(alpha_map)[3]
+        count_w = tf.shape(alpha_map)[2] * (tf.shape(alpha_map)[3] - 1)
+
+        batch_size = tf.cast(batch_size, dtype=tf.float32)
+        count_h = tf.cast(count_h, dtype=tf.float32)
+        count_w = tf.cast(count_w, dtype=tf.float32)
+
+        # Calculate Total Variation along height direction
+        tv_h = tf.reduce_sum(tf.square((alpha_map[:, 1:, :, :] - alpha_map[:, : h_alpha_map - 1, :, :])))
+        tv_h = tv_h /count_h
+
+        # Calculate Total Variation along width direction
+        tv_w = tf.reduce_sum(tf.square((alpha_map[:, :, 1:, :] - alpha_map[:, :, : w_alpha_map - 1, :])))
+        tv_w = tv_w /count_w
+
+        return 2*(tv_h + tv_w)/batch_size
+    
+    def get_config(self):
+        return super(IlluminationSmoothnessLoss, self).get_config()
+    
+    @classmethod
+    def from_config(cls, config):
+        return cls(**config)
+
+if __name__ == '__main__':
+    # Test the SpatialConsistencyLoss
+    img = tf.random.normal((1, 256, 256, 3))
+    img2 = tf.random.normal((1, 256, 256, 3))
+    loss = SpatialConsistencyLoss()
+    tf.print(f'SpatialConsistencyLoss: {loss(img,img2)}\n')
+
+    # Test the ExposureControlLoss
+    img = tf.random.normal((1, 256, 256, 3))
+    loss = ExposureControlLoss(e=0.6, patch_size=16)
+    tf.print(f'ExposureControlLoss: {loss(img)}\n')
+
+    # Test the ColorConstancyLoss
+    img = tf.random.normal((1, 256, 256, 3))
+    loss = ColorConstancyLosss()
+    tf.print(f'ColorConstancyLoss: {loss(img)}\n')
+
+    # Test the IlluminationSmoothnessLoss
+    img = tf.random.normal((1, 256, 256, 3))
+    loss = IlluminationSmoothnessLoss()
+    tf.print(f'IlluminationSmoothnessLoss: {loss(img)}\n')
+    
