@@ -159,6 +159,11 @@ def train(
             tf.summary.scalar('val_exposure_control_loss', val_losses['exposure_control_loss'], step=e+1)
             tf.summary.scalar('val_color_constancy_loss', val_losses['color_constancy_loss'], step=e+1)
             tf.summary.scalar('val_illumination_smoothness_loss', val_losses['illumination_smoothness_loss'], step=e+1)
+        
+        if (e+1)%10:
+            tf.print(f'Saving model at epoch {e+1}...\n')
+            zero_dce.save(f'{checkpoint_dir}/Zero-DCE_{e+1}', save_format='tf')
+            tf.print(f'Saved model at epoch {e+1}\n')
 
 
 
