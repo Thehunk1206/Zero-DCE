@@ -147,13 +147,7 @@ class ZeroDCE(tf.keras.Model):
         '''
         enahncened_img, a_maps = self(inputs)
         val_losses = self.compute_losses(inputs, enahncened_img, a_maps)
-        return {
-            'val_loss': val_losses['total_loss'],
-            'val_spatial_consistency_loss': val_losses['spatial_consistency_loss'],
-            'val_exposure_control_loss': val_losses['exposure_control_loss'],
-            'val_color_constancy_loss': val_losses['color_constancy_loss'],
-            'val_illumination_smoothness_loss': val_losses['illumination_smoothness_loss']
-        }
+        return val_losses
 
     def summary(self, plot:bool = False):
         x = tf.keras.Input(shape=(self.IMG_H, self.IMG_W, self.IMG_C))
@@ -181,3 +175,5 @@ if __name__ == "__main__":
     y,a_maps = model(x)
     tf.print(y.shape)
     tf.print(a_maps.shape)    
+    loss = model.test_step(x)
+    tf.print(loss)

@@ -90,7 +90,7 @@ class ExposureControlLoss(tf.keras.losses.Loss):
     '''
     def __init__(self, e:float = 0.6, patch_size: int = 16, **kwargs):
         super(ExposureControlLoss, self).__init__(**kwargs)
-        assert e > 0.0 and e < 1.0, 'The Value of e must be between 0.0 and 1.0'
+        assert e > 0.0 and e <= 1.0, 'The Value of e must be between 0.0 and 1.0'
 
         self.e = e
         self.patch_size = patch_size

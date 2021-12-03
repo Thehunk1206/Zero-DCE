@@ -1,1 +1,4 @@
 lol_datasetv2/
+__pycache__/
+logs/
+Trained_model/
