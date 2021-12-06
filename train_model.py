@@ -42,18 +42,6 @@ from ZeroDCE.losses import SpatialConsistencyLoss, \
 
 tf.random.set_seed(4)
 
-# def process_outs(le_imgs:tf.Tensor, a_maps:tf.Tensor, iteration:int) -> tf.Tensor:
-#     '''
-#     Post processing of outout tensors that will be logged to tensorboard
-#     '''
-#     # le_imgs= tf.clip_by_value(le_imgs, 0.0, 255.0)
-#     a_maps = tf.split(a_maps,iteration,axis=-1)
-#     a_maps = a_maps[-1] 
-#     # a_maps= tf.clip_by_value(a_maps, 0.0, 255.0)
-
-#     return le_imgs, a_maps
-
-
 
 def train(
     dataset_dir: str,
@@ -158,14 +146,7 @@ def train(
 
         tf.print('\n')
         tf.print('Writing logs to TensorBoard...\n')
-        le_imgs, a_maps = zero_dce(img)
-        le_imgs = (le_imgs - tf.reduce_min(le_imgs)) / (tf.reduce_max(le_imgs) - tf.reduce_min(le_imgs))
-        le_imgs = le_imgs * 255.0
-
-        a_maps = tf.split(a_maps,iteration,axis=-1)
-        a_maps = a_maps[-1]
-        a_maps = ((a_maps + 1.0)/2.0) * 255.0
-        # le_imgs, a_maps = process_outs(le_imgs, a_maps, iteration)
+        
         
         with train_writer.as_default():
             tf.summary.scalar('loss', losses['total_loss'], step=e+1)
@@ -180,10 +161,7 @@ def train(
             tf.summary.scalar('val_exposure_control_loss', val_losses['exposure_control_loss'], step=e+1)
             tf.summary.scalar('val_color_constancy_loss', val_losses['color_constancy_loss'], step=e+1)
             tf.summary.scalar('val_illumination_smoothness_loss', val_losses['illumination_smoothness_loss'], step=e+1)
-            tf.summary.image('input_image', img, step=e+1, max_outputs=batch_size)
-            tf.summary.image('output_image', le_imgs, step=e+1, max_outputs=batch_size)
-            tf.summary.image('a_map', a_maps, step=e+1, max_outputs=batch_size)
-        
+            
         if (e+1)%10 == 0:
             tf.print(f'Saving model at epoch {e+1}...\n')
             zero_dce.save(f'{checkpoint_dir}/Zero-DCE_{e+1}', save_format='tf')
