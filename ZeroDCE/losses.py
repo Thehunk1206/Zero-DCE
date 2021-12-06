@@ -143,7 +143,7 @@ class ColorConstancyLosss(tf.keras.losses.Loss):
         Drb = tf.square(mr - mb)
         Dbg = tf.square(mb - mg)
 
-        return tf.squeeze(tf.sqrt(tf.square(Drg) + tf.square(Drb) + tf.square(Dbg)))
+        return tf.reduce_mean(tf.squeeze(tf.sqrt(tf.square(Drg) + tf.square(Drb) + tf.square(Dbg))))
     
     def get_config(self):
         return super(ColorConstancyLosss, self).get_config()

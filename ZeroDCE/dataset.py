@@ -100,8 +100,9 @@ class TfdataPipeline:
         '''
         img_raw = tf.io.read_file(image_path)
         image = tf.image.decode_png(img_raw, channels=self.IMG_C)
+        image = tf.image.convert_image_dtype(image, tf.float32)
         image = tf.image.resize(image, size=[self.IMG_H, self.IMG_W], method=tf.image.ResizeMethod.BICUBIC)
-        image = image / 255.0
+        image = (image - tf.reduce_min(image)) / (tf.reduce_max(image) - tf.reduce_min(image))
 
         return image
     
@@ -155,7 +156,8 @@ if __name__ == "__main__":
 
     dataset = tfdataset.data_loader(dataset_type='test')
 
-    for image in dataset:
+    for image in dataset.take(2):
         tf.print(image.shape)
+        tf.print(tf.reduce_min(image), tf.reduce_max(image))
 
         
