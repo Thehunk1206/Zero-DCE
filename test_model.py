@@ -62,7 +62,7 @@ def datapipeline(dataset_path: str, img_h: int = 128, img_w:int = 256) -> tf.dat
     return test_data
 
 # A function to plot images and their corresponding enhanced images side by side in grid. 
-def plot_image(img:list, enhanced_img:list):
+def plot_image(img:list, enhanced_img:list, save_fig:bool=True):
     assert isinstance(img, list)
     assert isinstance(enhanced_img, list)
     assert len(img) == len(enhanced_img)
@@ -81,6 +81,8 @@ def plot_image(img:list, enhanced_img:list):
         ax.title.set_text('Enhanced Image')
         ax.axis('off')
     
+    if save_fig:
+        plt.savefig('test_image_plot.png')
     plt.show()
 
 
