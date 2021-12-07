@@ -50,13 +50,13 @@ def get_model(model_path: str):
     return model
 
 
-def datapipeline(dataset_path: str, imgsize: int = 352) -> tf.data.Dataset:
+def datapipeline(dataset_path: str, img_h: int = 128, img_w:int = 256) -> tf.data.Dataset:
     assert isinstance(dataset_path, str)
 
     # load dataset.
     # NOTE: Always set the batch size to 1 for testing.
     tfpipeline = TfdataPipeline(
-        BASE_DATASET_DIR=dataset_path, IMG_H=imgsize, IMG_W=imgsize, batch_size=1)
+        BASE_DATASET_DIR=dataset_path, IMG_H=img_h, IMG_W=img_w, batch_size=1)
     test_data = tfpipeline.data_loader(dataset_type='test')
 
     return test_data
@@ -87,11 +87,13 @@ def plot_image(img:list, enhanced_img:list):
 def run_test(
     model_path:str,
     dataset_path: str = 'lol_datasetv2/',
-    imgsize: int = 128,
+    img_h: int = 128,
+    img_w: int = 256,
 ):
     assert isinstance(model_path, str), 'model_path must be a string'
     assert isinstance(dataset_path, str), 'dataset_path must be a string'
-    assert isinstance(imgsize, int), 'imgsize must be an integer'
+    assert isinstance(img_h, int), 'img_h must be an integer'
+    assert isinstance(img_w, int), 'img_w must be an integer'
     assert os.path.exists(model_path), 'model_path does not exist'
     assert os.path.exists(dataset_path), 'dataset_path does not exist'
 
@@ -99,7 +101,7 @@ def run_test(
     model = get_model(model_path)
 
     # load dataset
-    test_data = datapipeline(dataset_path, imgsize)
+    test_data = datapipeline(dataset_path, img_h=img_h, img_w=img_w)
 
     # run test
     results = []
@@ -131,20 +133,23 @@ if __name__ == '__main__':
         help='path to the dataset'
     )
     parser.add_argument(
-        '--imgsize',
+        '--img_h',
         type=int,
         default=128,
-        help='image size'
+        help='image height'
+    )
+
+    parser.add_argument(
+        '--img_w',
+        type=int,
+        default=256,
+        help='Image width'
     )
     args = parser.parse_args()
 
-    start = time()
     run_test(
         model_path=args.model_path,
         dataset_path=args.dataset_path,
-        imgsize=args.imgsize
-    )
-    end = time()
-    tf.print(
-        '[info] test finished in {} seconds'.format(end - start)
+        img_h=args.img_h,
+        img_w=args.img_w
     )
