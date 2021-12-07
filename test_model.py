@@ -68,7 +68,7 @@ def plot_image(img:list, enhanced_img:list, save_fig:bool=True):
     assert len(img) == len(enhanced_img)
 
     # create figure with subplots
-    fig = plt.figure(figsize=(12, 12))
+    fig = plt.figure(figsize=(15, 15))
     gs = gridspec.GridSpec(nrows=2, ncols=len(img), figure=fig)
 
     for i in range(len(img)):
@@ -91,6 +91,7 @@ def run_test(
     dataset_path: str = 'lol_datasetv2/',
     img_h: int = 128,
     img_w: int = 256,
+    save_plot: bool = True
 ):
     assert isinstance(model_path, str), 'model_path must be a string'
     assert isinstance(dataset_path, str), 'dataset_path must be a string'
@@ -108,15 +109,22 @@ def run_test(
     # run test
     results = []
     inputs = []
+    times = []
     for data in tqdm(test_data.shuffle(buffer_size=50).take(5)):
+        start = time()
         enhanced_img, _ = model(data)
+        end = time() - start
         enhanced_img = tf.squeeze(enhanced_img, axis=0)
         data = tf.squeeze(data, axis=0)
         results.append(enhanced_img)
         inputs.append(data)
+        times.append(end)
+
+    average_time = sum(times)/len(times)
     
     # plot results
-    plot_image(inputs, results)
+    tf.print(f'Average inference time: {round(average_time, 2)*1000} ms')
+    plot_image(img=inputs, enhanced_img=results, save_fig=save_plot)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(

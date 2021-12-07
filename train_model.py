@@ -23,7 +23,6 @@ SOFTWARE.
 '''
 
 import os
-import sys
 import time
 from datetime import datetime
 from tqdm import tqdm
@@ -40,7 +39,10 @@ from ZeroDCE.losses import SpatialConsistencyLoss, \
                             ColorConstancyLosss,   \
                             IlluminationSmoothnessLoss
 
+# TODO: Add support for Zero-DCE lite model
+
 tf.random.set_seed(4)
+__model_type = ['zero_dce', 'zero_dce_lite']
 
 
 def train(
@@ -55,16 +57,18 @@ def train(
     dataset_split:float = 0.05,
     logdir:str = 'logs/',
     iteration:int = 8,
+    model_type: str = 'zero_dce',
 ):
     assert os.path.isdir(dataset_dir), f'Dataset directory {dataset_dir} is not a directory'
     assert os.path.exists(dataset_dir), f'Dataset directory {dataset_dir} does not exist'
     assert 0 < dataset_split < 0.3, 'Dataset split must be between 0 and 0.3'
+    assert isinstance(model_type, str), 'Model Type should be a string'
 
     if not os.path.exists(checkpoint_dir):
         os.mkdir(checkpoint_dir)
     
     # Instantiate tf.summary FileWriter
-    logdir = f'{logdir}/Model/Zero-DCE_{datetime.now().strftime("%Y%m%d-%H%M%S")}'
+    logdir = f'{logdir}/Model/{model_type}_{datetime.now().strftime("%Y%m%d-%H%M%S")}'
     train_writer = tf.summary.create_file_writer(logdir+'/train/')
     val_writer = tf.summary.create_file_writer(logdir+'/val/')
 
@@ -164,15 +168,16 @@ def train(
             
         if (e+1)%10 == 0:
             tf.print(f'Saving model at epoch {e+1}...\n')
-            zero_dce.save(f'{checkpoint_dir}/Zero-DCE_{e+1}', save_format='tf')
+            zero_dce.save(f'{checkpoint_dir}/{model_type}_iter{iteration}/{model_type}_iter{iteration}_{e+1}', save_format='tf')
             tf.print(f'Saved model at epoch {e+1}\n')
 
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Zero-DCE Training')
+    parser = argparse.ArgumentParser(description='Model training scipt for Zero-DCE models')
     parser.add_argument('--dataset_dir', type=str, required=True, help='Dataset directory')
     parser.add_argument('--checkpoint_dir', type=str, default='Trained_Model/', help='Checkpoint directory')
+    parser.add_argument('--model_type', type=str, default='zero_dce', help=f'Type of Model.should be any of: {__model_type}')
     parser.add_argument('--IMG_H', type=int, default=400, help='Image height')
     parser.add_argument('--IMG_W', type=int, default=600, help='Image width')
     parser.add_argument('--IMG_C', type=int, default=3, help='Image channels')
