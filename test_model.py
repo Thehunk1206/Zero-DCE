@@ -62,7 +62,7 @@ def datapipeline(dataset_path: str, img_h: int = 128, img_w:int = 256) -> tf.dat
     return test_data
 
 # A function to plot images and their corresponding enhanced images side by side in grid. 
-def plot_image(img:list, enhanced_img:list, save_fig:bool=True):
+def plot_image(img:list, enhanced_img:list, model_name:str, save_fig:bool=True):
     assert isinstance(img, list)
     assert isinstance(enhanced_img, list)
     assert len(img) == len(enhanced_img)
@@ -80,9 +80,10 @@ def plot_image(img:list, enhanced_img:list, save_fig:bool=True):
         ax.imshow(enhanced_img[i])
         ax.title.set_text('Enhanced Image')
         ax.axis('off')
-    
+    plt.tight_layout()
+    plt.suptitle(f'Original vs Enhanced Image: {model_name}')
     if save_fig:
-        plt.savefig('test_image_plot.png')
+        plt.savefig(f'image_assets/test_image_plot_{model_name}.png')
     plt.show()
 
 
@@ -99,6 +100,8 @@ def run_test(
     assert isinstance(img_w, int), 'img_w must be an integer'
     assert os.path.exists(model_path), 'model_path does not exist'
     assert os.path.exists(dataset_path), 'dataset_path does not exist'
+
+    model_name = model_path.split('/')[-2]
 
     # load model
     model = get_model(model_path)
@@ -124,7 +127,7 @@ def run_test(
     
     # plot results
     tf.print(f'Average inference time: {round(average_time, 2)*1000} ms')
-    plot_image(img=inputs, enhanced_img=results, save_fig=save_plot)
+    plot_image(img=inputs, enhanced_img=results, model_name=model_name, save_fig=save_plot)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
