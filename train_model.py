@@ -168,7 +168,7 @@ def train(
             
         if (e+1)%10 == 0:
             tf.print(f'Saving model at epoch {e+1}...\n')
-            zero_dce.save(f'{checkpoint_dir}/{model_type}_iter{iteration}/{model_type}_iter{iteration}_{e+1}', save_format='tf')
+            zero_dce.save(f'{checkpoint_dir}/{model_type}_iter{iteration}/{model_type}_{IMG_H}x{IMG_W}_iter{iteration}_{e+1}', save_format='tf')
             tf.print(f'Saved model at epoch {e+1}\n')
 
 
