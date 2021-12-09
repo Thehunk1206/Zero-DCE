@@ -26,6 +26,7 @@ import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 import tensorflow as tf
+from tensorflow.keras import layers
 
 
 class ZeroDCE_lite(tf.keras.Model):
@@ -38,7 +39,6 @@ class ZeroDCE_lite(tf.keras.Model):
         self.IMG_W = IMG_W
         self.IMG_C = IMG_C
 
-        
     
     def call(self, inputs: tf.Tensor):
         pass

@@ -30,11 +30,13 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 import tensorflow as tf
 from tensorflow.keras import models
+
 from matplotlib import pyplot as plt
 import matplotlib.gridspec as gridspec
 
 from ZeroDCE.dataset import TfdataPipeline
 
+tf.random.set_seed(42)
 
 def get_model(model_path: str):
     assert isinstance(model_path, str) , 'model_path must be a string'
@@ -113,7 +115,7 @@ def run_test(
     results = []
     inputs = []
     times = []
-    for data in tqdm(test_data.shuffle(buffer_size=50).take(5)):
+    for data in tqdm(test_data.take(5)):
         start = time()
         enhanced_img, _ = model(data)
         end = time() - start
