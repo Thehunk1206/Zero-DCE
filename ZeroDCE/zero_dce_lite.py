@@ -27,6 +27,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 import tensorflow as tf
 from tensorflow.keras import layers
+from tensorflow.keras import initializers
 
 
 class ZeroDCE_lite(tf.keras.Model):
@@ -38,11 +39,93 @@ class ZeroDCE_lite(tf.keras.Model):
         self.IMG_H = IMG_H
         self.IMG_W = IMG_W
         self.IMG_C = IMG_C
+        
+        self.depth_conv1 = layers.SeparableConv2D(
+            filters=self.filters,
+            kernel_size=(3, 3),
+            strides=(1, 1),
+            padding='same',
+            depth_multiplier=1,
+            depthwise_initializer=initializers.RandomNormal(mean=0.0, stddev=0.02),
+            pointwise_initializer=initializers.RandomNormal(mean=0.0, stddev=0.02)
+        )
+
+        self.depth_conv2 = layers.SeparableConv2D(
+            filters=self.filters,
+            kernel_size=(3, 3),
+            strides=(1, 1),
+            padding='same',
+            depth_multiplier=1,
+            depthwise_initializer=initializers.RandomNormal(mean=0.0, stddev=0.02),
+            pointwise_initializer=initializers.RandomNormal(mean=0.0, stddev=0.02)
+        )
+
+        self.depth_conv3 = layers.SeparableConv2D(
+            filters=self.filters,
+            kernel_size=(3, 3),
+            strides=(1, 1),
+            padding='same',
+            depth_multiplier=1,
+            depthwise_initializer=initializers.RandomNormal(mean=0.0, stddev=0.02),
+            pointwise_initializer=initializers.RandomNormal(mean=0.0, stddev=0.02)
+        )
+
+        self.depth_conv4 = layers.SeparableConv2D(
+            filters=self.filters,
+            kernel_size=(3, 3),
+            strides=(1, 1),
+            padding='same',
+            depth_multiplier=1,
+            depthwise_initializer=initializers.RandomNormal(mean=0.0, stddev=0.02),
+            pointwise_initializer=initializers.RandomNormal(mean=0.0, stddev=0.02)
+        )
+
+        self.depth_conv5 = layers.SeparableConv2D(
+            filters=self.filters,
+            kernel_size=(3, 3),
+            strides=(1, 1),
+            padding='same',
+            depth_multiplier=1,
+            depthwise_initializer=initializers.RandomNormal(mean=0.0, stddev=0.02),
+            pointwise_initializer=initializers.RandomNormal(mean=0.0, stddev=0.02)
+        )
+
+        self.depth_conv6 = layers.SeparableConv2D(
+            filters=self.filters,
+            kernel_size=(3, 3),
+            strides=(1, 1),
+            padding='same',
+            depth_multiplier=1,
+            depthwise_initializer=initializers.RandomNormal(mean=0.0, stddev=0.02),
+            pointwise_initializer=initializers.RandomNormal(mean=0.0, stddev=0.02)
+        )
+
+        self.depth_conv_out = layers.SeparableConv2D(
+            filters=3,
+            kernel_size=(3, 3),
+            strides=(1, 1),
+            padding='same',
+            depth_multiplier=1,
+            depthwise_initializer=initializers.RandomNormal(mean=0.0, stddev=0.02),
+            pointwise_initializer=initializers.RandomNormal(mean=0.0, stddev=0.02)
+        )
 
     
     def call(self, inputs: tf.Tensor):
-        pass
-    
+        x1 = tf.nn.relu(self.depth_conv1(inputs))
+        x2 = tf.nn.relu(self.depth_conv2(x1))
+        x3 = tf.nn.relu(self.depth_conv3(x2))
+        x4 = tf.nn.relu(self.depth_conv4(x3))
+        x5 = tf.nn.relu(self.depth_conv5(tf.concat([x3, x4], axis=-1)))
+        x6 = tf.nn.relu(self.depth_conv6(tf.concat([x2, x5], axis=-1)))
+        a_map = tf.nn.tanh(self.depth_conv_out(tf.concat([x1, x6], axis=-1)))
+
+        enhanced_image = inputs
+        for _ in range(self.iteration):
+            enhanced_image = enhanced_image + a_map * (tf.square(enhanced_image) - enhanced_image)
+        
+        return enhanced_image, a_map
+
     def compile(
         self,
         optimizer: tf.keras.optimizers.Optimizer,
@@ -54,7 +137,7 @@ class ZeroDCE_lite(tf.keras.Model):
             'spatial_consistency_w': 1.0,
             'exposure_control_w': 10.0,
             'color_constancy_w': 5.0,
-            'illumination_smoothness_w': 200.0
+            'illumination_smoothness_w': 800.0
         },
         **kwargs
     ):
@@ -128,7 +211,7 @@ class ZeroDCE_lite(tf.keras.Model):
         x = tf.keras.Input(shape=(self.IMG_H, self.IMG_W, self.IMG_C))
         model = tf.keras.Model(inputs=[x], outputs=self.call(x), name='DCE-net_lite')
         if plot:
-            tf.keras.utils.plot_model(model, to_file='DCE-net_lite.png', show_shapes=True, show_layer_names=True, rankdir='TB')
+            tf.keras.utils.plot_model(model, to_file='image_assets/DCE-net_lite.png', show_shapes=True, show_layer_names=True, rankdir='TB')
         return model.summary()
     
     def get_config(self):
@@ -144,9 +227,9 @@ class ZeroDCE_lite(tf.keras.Model):
 
 if __name__ == "__main__":
     x = tf.random.normal([1, 400, 600, 3])
-    model = ZeroDCE_lite(filters=32, iteration=1)
+    model = ZeroDCE_lite(filters=32, iteration=8, IMG_H=400, IMG_W=600, IMG_C=3)
     tf.print(model.summary(plot=True))
     tf.print(model.get_config())
-    y,a_maps = model(x)
+    y,a_map = model(x)
     tf.print(y.shape)
-    tf.print(a_maps.shape)
+    tf.print(a_map.shape)

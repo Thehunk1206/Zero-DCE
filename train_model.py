@@ -34,12 +34,13 @@ import tensorflow as tf
 
 from ZeroDCE.dataset import TfdataPipeline
 from ZeroDCE.zero_dce import ZeroDCE
+from ZeroDCE.zero_dce_lite import ZeroDCE_lite
 from ZeroDCE.losses import SpatialConsistencyLoss, \
                             ExposureControlLoss,   \
                             ColorConstancyLosss,   \
                             IlluminationSmoothnessLoss
 
-# TODO: Add support for Zero-DCE lite model
+# TODO: Add support for Pre-trained model to be loaded from checkpoint directory and continue training
 
 tf.random.set_seed(4)
 __model_type = ['zero_dce', 'zero_dce_lite']
@@ -95,19 +96,32 @@ def train(
     illumination_smoothness_loss = IlluminationSmoothnessLoss()
 
     # Instantiate Zero-DCE model
-    tf.print('Creating Zero-DCE model...\n')
-    zero_dce = ZeroDCE(
-        name='DCE-Net',
-        filters=32,
-        iteration=iteration,
-        IMG_H=IMG_H,
-        IMG_W=IMG_W,
-        IMG_C=IMG_C,
-    )
+    if model_type == 'zero_dce':
+        tf.print('Creating Zero-DCE model...\n')
+        model = ZeroDCE(
+            name='DCE-Net',
+            filters=32,
+            iteration=iteration,
+            IMG_H=IMG_H,
+            IMG_W=IMG_W,
+            IMG_C=IMG_C,
+        )
+    elif model_type == 'zero_dce_lite':
+        tf.print('Creating Zero-DCE Lite model...\n')
+        model = ZeroDCE_lite(
+            name='DCE-Net',
+            filters=32,
+            iteration=iteration,
+            IMG_H=IMG_H,
+            IMG_W=IMG_W,
+            IMG_C=IMG_C,
+        )
+    else:
+        raise ValueError(f'Model type {model_type} is not supported')
 
     # Compile the model
     tf.print('Compiling the model...\n')
-    zero_dce.compile(
+    model.compile(
         optimizer=optimizer,
         spatial_consistency_loss=spatial_consistency_loss,
         exposure_control_loss=exposure_control_loss,
@@ -116,7 +130,7 @@ def train(
     )
 
     tf.print(f'[INFO] Summary of model\n')
-    tf.print(zero_dce.summary())
+    tf.print(model.summary())
 
     tf.print('\n')
     tf.print('*'*60)
@@ -125,7 +139,7 @@ def train(
 
     tf.print(
         f'\n',
-        f'Model Name                : {zero_dce.name}\n',
+        f'Model Name                : {model.name}\n',
         f'Input shape               : ({IMG_H, IMG_W, IMG_C})\n',
         f'Epochs                    : {epoch}\n',
         f'Batch Size                : {batch_size}\n',
@@ -141,17 +155,14 @@ def train(
         t = time.time()
 
         for img in tqdm(train_data, unit='steps', desc='training...', colour='red'):
-            losses = zero_dce.train_step(img)
+            losses = model.train_step(img)
         
         for img in tqdm(val_data, unit='steps', desc='validating...', colour='green'):
-            val_losses = zero_dce.test_step(img)
+            val_losses = model.test_step(img)
         
         tf.print(f"ETA:{round((time.time() - t)/60, 2)} - epoch: {(e+1)} - loss: {losses['total_loss']}  val_loss: {val_losses['total_loss']}\n")
 
-        tf.print('\n')
         tf.print('Writing logs to TensorBoard...\n')
-        
-        
         with train_writer.as_default():
             tf.summary.scalar('loss', losses['total_loss'], step=e+1)
             tf.summary.scalar('spatial_consistency_loss', losses['spatial_consistency_loss'], step=e+1)
@@ -165,10 +176,10 @@ def train(
             tf.summary.scalar('val_exposure_control_loss', val_losses['exposure_control_loss'], step=e+1)
             tf.summary.scalar('val_color_constancy_loss', val_losses['color_constancy_loss'], step=e+1)
             tf.summary.scalar('val_illumination_smoothness_loss', val_losses['illumination_smoothness_loss'], step=e+1)
-            
+        
         if (e+1)%10 == 0:
             tf.print(f'Saving model at epoch {e+1}...\n')
-            zero_dce.save(f'{checkpoint_dir}/{model_type}_iter{iteration}/{model_type}_{IMG_H}x{IMG_W}_iter{iteration}_{e+1}', save_format='tf')
+            model.save(f'{checkpoint_dir}/{model_type}_iter{iteration}/{model_type}_{IMG_H}x{IMG_W}_iter{iteration}_{e+1}', save_format='tf')
             tf.print(f'Saved model at epoch {e+1}\n')
 
 
@@ -192,6 +203,7 @@ def main():
     train(
         dataset_dir=args.dataset_dir,
         checkpoint_dir=args.checkpoint_dir,
+        model_type=args.model_type,
         IMG_H=args.IMG_H,
         IMG_W=args.IMG_W,
         IMG_C=args.IMG_C,

@@ -23,6 +23,7 @@ SOFTWARE.
 '''
 
 import os
+from typing import Tuple
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 import tensorflow as tf
@@ -49,7 +50,7 @@ class ZeroDCE(tf.keras.Model):
         self.concat_1_6 = tf.keras.layers.Concatenate(axis=-1)
         self.a_map_conv = tf.keras.layers.Conv2D(self.iteration*3, kernel_size=(3, 3), strides=(1,1), padding='same',activation='tanh')
     
-    def call(self, inputs: tf.Tensor):
+    def call(self, inputs: tf.Tensor)-> Tuple[tf.Tensor,...]:
         x1 = self.conv1(inputs)
         x2 = self.conv2(x1)
         x3 = self.conv3(x2)
@@ -79,7 +80,7 @@ class ZeroDCE(tf.keras.Model):
             'spatial_consistency_w': 1.0,
             'exposure_control_w': 20.0,
             'color_constancy_w': 10.0,
-            'illumination_smoothness_w': 150.0
+            'illumination_smoothness_w': 400.0
         },
         **kwargs
     ):
