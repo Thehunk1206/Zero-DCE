@@ -45,6 +45,7 @@ class ZeroDCE_lite(tf.keras.Model):
             kernel_size=(3, 3),
             strides=(1, 1),
             padding='same',
+            activation='relu',
             depth_multiplier=1,
             depthwise_initializer=initializers.RandomNormal(mean=0.0, stddev=0.02),
             pointwise_initializer=initializers.RandomNormal(mean=0.0, stddev=0.02)
@@ -55,6 +56,7 @@ class ZeroDCE_lite(tf.keras.Model):
             kernel_size=(3, 3),
             strides=(1, 1),
             padding='same',
+            activation='relu',
             depth_multiplier=1,
             depthwise_initializer=initializers.RandomNormal(mean=0.0, stddev=0.02),
             pointwise_initializer=initializers.RandomNormal(mean=0.0, stddev=0.02)
@@ -65,6 +67,7 @@ class ZeroDCE_lite(tf.keras.Model):
             kernel_size=(3, 3),
             strides=(1, 1),
             padding='same',
+            activation='relu',
             depth_multiplier=1,
             depthwise_initializer=initializers.RandomNormal(mean=0.0, stddev=0.02),
             pointwise_initializer=initializers.RandomNormal(mean=0.0, stddev=0.02)
@@ -75,6 +78,7 @@ class ZeroDCE_lite(tf.keras.Model):
             kernel_size=(3, 3),
             strides=(1, 1),
             padding='same',
+            activation='relu',
             depth_multiplier=1,
             depthwise_initializer=initializers.RandomNormal(mean=0.0, stddev=0.02),
             pointwise_initializer=initializers.RandomNormal(mean=0.0, stddev=0.02)
@@ -85,6 +89,7 @@ class ZeroDCE_lite(tf.keras.Model):
             kernel_size=(3, 3),
             strides=(1, 1),
             padding='same',
+            activation='relu',
             depth_multiplier=1,
             depthwise_initializer=initializers.RandomNormal(mean=0.0, stddev=0.02),
             pointwise_initializer=initializers.RandomNormal(mean=0.0, stddev=0.02)
@@ -95,6 +100,7 @@ class ZeroDCE_lite(tf.keras.Model):
             kernel_size=(3, 3),
             strides=(1, 1),
             padding='same',
+            activation='relu',
             depth_multiplier=1,
             depthwise_initializer=initializers.RandomNormal(mean=0.0, stddev=0.02),
             pointwise_initializer=initializers.RandomNormal(mean=0.0, stddev=0.02)
@@ -105,6 +111,7 @@ class ZeroDCE_lite(tf.keras.Model):
             kernel_size=(3, 3),
             strides=(1, 1),
             padding='same',
+            activation='tanh',
             depth_multiplier=1,
             depthwise_initializer=initializers.RandomNormal(mean=0.0, stddev=0.02),
             pointwise_initializer=initializers.RandomNormal(mean=0.0, stddev=0.02)
@@ -112,13 +119,13 @@ class ZeroDCE_lite(tf.keras.Model):
 
     
     def call(self, inputs: tf.Tensor):
-        x1 = tf.nn.relu(self.depth_conv1(inputs))
-        x2 = tf.nn.relu(self.depth_conv2(x1))
-        x3 = tf.nn.relu(self.depth_conv3(x2))
-        x4 = tf.nn.relu(self.depth_conv4(x3))
-        x5 = tf.nn.relu(self.depth_conv5(tf.concat([x3, x4], axis=-1)))
-        x6 = tf.nn.relu(self.depth_conv6(tf.concat([x2, x5], axis=-1)))
-        a_map = tf.nn.tanh(self.depth_conv_out(tf.concat([x1, x6], axis=-1)))
+        x1 = self.depth_conv1(inputs)
+        x2 = self.depth_conv2(x1)
+        x3 = self.depth_conv3(x2)
+        x4 = self.depth_conv4(x3)
+        x5 = self.depth_conv5(tf.concat([x3, x4], axis=-1))
+        x6 = self.depth_conv6(tf.concat([x2, x5], axis=-1))
+        a_map = self.depth_conv_out(tf.concat([x1, x6], axis=-1))
 
         enhanced_image = inputs
         for _ in range(self.iteration):
