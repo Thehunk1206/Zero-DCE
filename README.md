@@ -16,6 +16,19 @@ Paper: Zero-DCE
     }
 ```
 
+Paper: Zero-DCE++
+```
+@Article{Zero-DCE++,
+          author ={Li, Chongyi and Guo, Chunle and Loy, Chen Change},
+          title = {Learning to Enhance Low-Light Image via Zero-Reference Deep Curve Estimation},
+          journal = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
+          pape={},
+          year = {2021},
+          doi={10.1109/TPAMI.2021.3063604}
+          }
+
+```
+
 Dataset
 
 ```
