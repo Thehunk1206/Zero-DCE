@@ -43,6 +43,168 @@ The main changes in DCE-net++ are:
 2. The last convolution layers has only 3 filters instead of ``interation`` x 3 number of filters which can be used to iteratively enhance the images.
 
 ### **Zero-Reference Loss Functions**
+The paper proposes set of zero-reference loss functions that differntiable which allows to assess the quality of enhanced image.
+
+1. **Spatial Consistency Loss**
+    The spatial consistency loss $L_{spa}$
+    encourages spatial coherence of the enhanced image through
+    preserving the difference of neighboring regions between the input
+    image and its enhanced version
+
+    [Spatial Consistency loss](ZeroDCE/losses.py#SpatialConsistencyLoss)
+
+2. **Exposure controll loss**
+   To restrain the exposure of the enhanced image, the exposure control loss 
+   $L_{exp}$ is designed to control the exposure of the enhanced image.
+   The exposure control loss measures the distance between the
+   average intensity value of a local region to the well-exposedness
+   level $E$.
+
+  [Exposure control loss](ZeroDCE/losses.py#ExposureControlLoss)
+
+3. **Color Constancy loss**
+   By Following the [Gray-world hypothesis](https://en.wikipedia.org/wiki/Color_constancy) that color in each sensor channel(RGB) averages to gray over the entire image, the paper proposes a color constancy loss $L_{col}$ to correct the potential diviation of color in the enhanced image.
+
+   [Color Constancy loss](ZeroDCE/losses.py#ColorConstancyLoss)
+
+4. **Illumination Smoothness Loss**
+   To preserve the monotonicity
+   relations between neighboring pixels, we add an illumination
+   smoothness loss to each curve parameter map A.
+
+   [Illumination Smoothness loss](ZeroDCE/losses.py#IlluminationSmoothnessLoss)
+
+# Training and Testing Model
+
+Zero-DCE and Zero-DCE++ model was created using [Tensorflow 2.7.0](https://www.tensorflow.org/api_docs/python/tf) and [Keras](https://keras.io/) and trained on google colab's Tesla K80 GPU (12GB VRAM)
+
+## Dataset pipeline and Dataset used
+I used Tensorflow's [tf.data](https://www.tensorflow.org/guide/data) api to create a dataset input pipeline. Input [data pipeline](ZeroDCE/dataset.py)
+
+**dataset structure:**
+```
+lol_datasetv2
+├── 100.png
+├── 101.png
+├── 102.png
+├── 103.png
+├── 109.png
+├── 10.png
+├── 95.png
+├── 96.png
+├── 97.png
+├── 98.png
+├── 99.png
+└── 9.png
+
+0 directories, 500 files
+```
+Dataset link: [LoL-dataset](https://drive.google.com/file/d/157bjO1_cFuSd0HWDUuAmcHRJDVyWpOxB/view)
+
+## Usage
+* Clone this github [repo](https://github.com/Thehunk1206/Zero-DCE)
+* Run ```$pip install -r requirements.txt``` to install required python packgages.
+
+### For training the model, run following
+```
+$ python train_model.py --help
+usage: train_model.py [-h] --dataset_dir DATASET_DIR [--checkpoint_dir CHECKPOINT_DIR] [--model_type MODEL_TYPE] [--IMG_H IMG_H]
+                      [--IMG_W IMG_W] [--IMG_C IMG_C] [--batch_size BATCH_SIZE] [--epoch EPOCH] [--learning_rate LEARNING_RATE]
+                      [--dataset_split DATASET_SPLIT] [--logdir LOGDIR] [--iteration ITERATION]
+
+Model training scipt for Zero-DCE models
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --dataset_dir DATASET_DIR
+                        Dataset directory
+  --checkpoint_dir CHECKPOINT_DIR
+                        Checkpoint directory
+  --model_type MODEL_TYPE
+                        Type of Model.should be any of: ['zero_dce', 'zero_dce_lite']
+  --IMG_H IMG_H         Image height
+  --IMG_W IMG_W         Image width
+  --IMG_C IMG_C         Image channels
+  --batch_size BATCH_SIZE
+                        Batch size
+  --epoch EPOCH         Epochs
+  --learning_rate LEARNING_RATE
+                        Learning rate
+  --dataset_split DATASET_SPLIT
+                        Dataset split
+  --logdir LOGDIR       Log directory
+  --iteration ITERATION
+                        Post enhancing iteration
+```
+Example
+```
+!python train_model.py --dataset_dir lol_datasetv2/ \
+                      --model_type zero_dce_lite \
+                      --checkpoint_dir Trained_model/ \ 
+                      --IMG_H 512 \
+                      --IMG_W 512 \
+                      --epoch 60 \
+                      --batch_size 4 \ 
+                      --iteration 6 \
+```
+### Testing the model on the test dataset
+```
+$ python test_model.py --help
+usage: test_model.py [-h] --model_path MODEL_PATH [--dataset_path DATASET_PATH] [--img_h IMG_H] [--img_w IMG_W]
+
+Test model on test dataset
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --model_path MODEL_PATH
+                        path to the saved model folder
+  --dataset_path DATASET_PATH
+                        path to the dataset
+  --img_h IMG_H         image height
+  --img_w IMG_W         Image width
+```
+Example
+```
+!python test_model.py --model_path Trained_model/zero_dce_lite_iter8/zero_dce_lite_200x300_iter8_60/ \
+                      --datset_path lol_datasetv2/ \
+                      --img_h 200 
+                      --img_w 300
+```
+### Inferencing on single image for enhancement
+```
+$ python single_image_enhance.py --help                                                                                      
+usage: single_image_enhance.py [-h] --model_path MODEL_PATH --image_path IMAGE_PATH [--img_h IMG_H] [--img_w IMG_W] [--plot PLOT] [--save_result SAVE_RESULT] [--iteration ITERATION]
+
+Single Image Enhancement
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --model_path MODEL_PATH
+                        path to tf model
+  --image_path IMAGE_PATH
+                        path to image file
+  --img_h IMG_H         image height
+  --img_w IMG_W         image width
+  --plot PLOT           plot enhanced image
+  --save_result SAVE_RESULT
+                        save enhanced image
+  --iteration ITERATION
+                        number of Post Ehnancing iterations
+```
+Example
+```
+$ python single_image_enhance.py --model_path Trained_model/zero_dce_iter6/zero_dce_200x300_iter6_30 \
+                                --img_h 200 \
+                                --img_w 300 \
+                                --image_path sample_images/ low_light_outdoor.jpg \
+                                --plot 0 \
+                                --save_result 1 \
+                                --iteration 6 \
+```
+
+# Visual Results
+
+
 
 
 

@@ -106,6 +106,9 @@ def run_inference(model_path:str, image_path:str, img_h:int=200, img_w: int=300,
     # Get image name from path
     image_name = (image_path.split('/')[-1]).split('.')[0]
 
+    # Get model name from model path
+    model_name = (model_path.split('/')[-1])
+
     # load the model
     model = get_model(model_path)
 
@@ -168,7 +171,7 @@ def run_inference(model_path:str, image_path:str, img_h:int=200, img_w: int=300,
     if save_result == 1:
         ehnanced_original_image = post_enhance_iteration(original_image, a_maps, iteration)
         save_img(
-            os.path.join(_results_dir, f'enhanced_{image_name}.jpg'),
+            os.path.join(_results_dir, f'{model_name}_enhanced_{image_name}.jpg'),
             ehnanced_original_image
         )
         tf.print(
