@@ -184,8 +184,8 @@ def main():
     parser.add_argument('--image_path', type=str, required=True, help='path to image file')
     parser.add_argument('--img_h', type=int, default=200, help='image height')
     parser.add_argument('--img_w', type=int, default=300, help='image width')
-    parser.add_argument('--plot', type=int, default=1, help='plot enhanced image')
-    parser.add_argument('--save_result', type=int, default=0, help='save enhanced image')
+    parser.add_argument('--plot', type=int, default=1, help='plot enhanced image. 0: no plot, 1: plot')
+    parser.add_argument('--save_result', type=int, default=0, help='save enhanced image. 0: no save, 1: save')
     parser.add_argument('--iteration', type=int, default=6, help='number of Post Ehnancing iterations')
     args = parser.parse_args()
 

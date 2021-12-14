@@ -94,12 +94,13 @@ def run_test(
     dataset_path: str = 'lol_datasetv2/',
     img_h: int = 128,
     img_w: int = 256,
-    save_plot: bool = True
+    save_plot: int = 0,
 ):
     assert isinstance(model_path, str), 'model_path must be a string'
     assert isinstance(dataset_path, str), 'dataset_path must be a string'
     assert isinstance(img_h, int), 'img_h must be an integer'
     assert isinstance(img_w, int), 'img_w must be an integer'
+    assert save_plot in [0, 1], 'save_plot must be either 0 or 1'
     assert os.path.exists(model_path), 'model_path does not exist'
     assert os.path.exists(dataset_path), 'dataset_path does not exist'
 
@@ -115,7 +116,7 @@ def run_test(
     results = []
     inputs = []
     times = []
-    for data in tqdm(test_data.take(5)):
+    for data in tqdm(test_data):
         start = time()
         enhanced_img, _ = model(data)
         end = time() - start
@@ -125,11 +126,11 @@ def run_test(
         inputs.append(data)
         times.append(end)
 
-    average_time = sum(times)/len(times)
-    
+    average_time = sum(times[2:])/len(times[2:])
     # plot results
     tf.print(f'Average inference time: {round(average_time, 2)*1000} ms')
-    plot_image(img=inputs, enhanced_img=results, model_name=model_name, save_fig=save_plot)
+    if save_plot == 1:
+        plot_image(img=inputs[:5], enhanced_img=results[:5], model_name=model_name, save_fig=save_plot)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
@@ -160,11 +161,19 @@ if __name__ == '__main__':
         default=256,
         help='Image width'
     )
+
+    parser.add_argument(
+        '--save_plot',
+        type=int,
+        default=0,
+        help='save plot of original vs enhanced image. 0: no, 1: yes'
+    )
     args = parser.parse_args()
 
     run_test(
         model_path=args.model_path,
         dataset_path=args.dataset_path,
         img_h=args.img_h,
-        img_w=args.img_w
+        img_w=args.img_w,
+        save_plot=args.save_plot
     )

@@ -223,23 +223,23 @@ $ python single_image_enhance.py --model_path Trained_model/zero_dce_iter6/zero_
 
 ## Testset Results
 
-### 1.Model: Zero-DCE, Epoch:60 , Input size:200x300, Iteration:4
+### 1.Model: Zero-DCE, Epoch:30 , Input size:200x300, Iteration:4, Average Time: CPU-170.0 ms
 ![test_image_plot_zero_dce_iter4_30](image_asset/../image_assets/test_image_plot_zero_dce_iter4_30.png)
 
 
-### 2.Model: Zero-DCE, Epoch:30, Input size: 200x300, Iteration:6
+### 2.Model: Zero-DCE, Epoch:30, Input size: 200x300, Iteration:6, Average Time: CPU-170.0 ms
 ![test_image_plot_zero_dce_iter6_30.png](image_assets/test_image_plot_zero_dce_iter6_30.png)
 
 
-### 3.Model: Zero-DCE, Epoch:30, Inout size: 200x300, Iteration:8
+### 3.Model: Zero-DCE, Epoch:30, Inout size: 200x300, Iteration:8, Average Time: CPU-170.0 ms
 ![test_image_plot_zero_dce_iter8_30](image_assets/test_image_plot_zero_dce_iter8_30.png)
 
 
-### 4.Model: Zero-DCE Lite, Epoch:60, Input size: 512x512, Iteration:6
+### 4.Model: Zero-DCE Lite, Epoch:60, Input size: 512x512, Iteration:6, Average Time: CPU-450 ms
 ![test_image_plot_zero_dce_lite_iter6](image_assets/test_image_plot_zero_dce_lite_iter6.png)
 
 
-### 5.Model: Zero-DCE Lite, Epoch:60, Input size: 200x300, Iteration:8
+### 5.Model: Zero-DCE Lite, Epoch:60, Input size: 200x300, Iteration:8, Average Time: CPU-90 ms
 ![test_image_plot_zero_dce_lite_iter8](image_assets/test_image_plot_zero_dce_lite_iter8.png)
 
 
