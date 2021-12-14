@@ -280,12 +280,12 @@ $ python single_image_enhance.py --model_path Trained_model/zero_dce_iter6/zero_
 
 
 
-|<img src="sample_images/low_light_road_side.jpg" alt="img" width=250 height=400>|<img src="output/zero_dce_200x300_iter8_30_enhanced_low_light_road_side.jpg" alt="img" width=250 height=400 >|
+|<img src="sample_images/low_light_road_side.jpg" alt="img" width=300 height=400>|<img src="output/zero_dce_200x300_iter8_30_enhanced_low_light_road_side.jpg" alt="img" width=300 height=400 >|
 |:--:|:--:|
 |low light image|Enhanced Image(Zero-DCE, epoch:30, interation:8)|
 
 
-|<img src="sample_images/low_light_road_side.jpg" alt="img" width=250 height=400>|<img src="output/zero_dce_lite_200x300_iter8_60_enhanced_low_light_road_side.jpg" alt="img" width=250 height=400 >|
+|<img src="sample_images/low_light_road_side.jpg" alt="img" width=300 height=400>|<img src="output/zero_dce_lite_200x300_iter8_60_enhanced_low_light_road_side.jpg" alt="img" width=300 height=400 >|
 |:--:|:--:|
 |low light image|Enhanced Image(Zero-DCE lite, epoch:60, interation:8)|
 
