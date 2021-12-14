@@ -115,7 +115,7 @@ lol_datasetv2
 
 0 directories, 500 files
 ```
-Dataset link: [LoL-dataset](https://drive.google.com/file/d/157bjO1_cFuSd0HWDUuAmcHRJDVyWpOxB/view)
+### Dataset link: [LoL-dataset](https://drive.google.com/file/d/157bjO1_cFuSd0HWDUuAmcHRJDVyWpOxB/view)
 
 ## Usage
 * Clone this github [repo](https://github.com/Thehunk1206/Zero-DCE)
@@ -291,11 +291,23 @@ $ python single_image_enhance.py --model_path Trained_model/zero_dce_iter6/zero_
 
 |<img src="sample_images/low_light_pizza.jpeg" alt="img" width=300 height=300>|<img src="output/zero_dce_lite_200x300_iter8_60_enhanced_low_light_pizza.jpg" alt="img" width=300 height=300 >|
 |:--:|:--:|
-|low light image|Enhanced Image(Zero-DCE lite, epoch:60, interation:8)|
+|low light image|Enhanced Image(Zero-DCE lite, epoch:60, interation:6)|
+
+# Best SavedModel for Zero-DCE and Zero-DCE Lite
+## Releasing soon
+
+# Demo Apllication
+## Mobile Demo application of our trained model is comming soon
+
+
+# References
+* [Zero-reference deep curve estimation for low-light image enhancement](https://arxiv.org/pdf/2001.06826.pdf)
+* [Learning to Enhance Low-Light Image
+via Zero-Reference Deep Curve Estimation (Zero-DCE++)](https://arxiv.org/pdf/2103.00860.pdf)
+* [A Basic Introduction to Separable Convolutions](https://towardsdatascience.com/a-basic-introduction-to-separable-convolutions-b99ec3102728)
 
 
 # Citation
-
 Paper: Zero-DCE
 
 ```
