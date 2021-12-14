@@ -26,7 +26,7 @@ from time import time
 from tqdm import tqdm
 import argparse
 import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 import tensorflow as tf
 from tensorflow.keras import models
@@ -95,12 +95,14 @@ def run_test(
     img_h: int = 128,
     img_w: int = 256,
     save_plot: int = 0,
+    load_random_data: int = 0
 ):
     assert isinstance(model_path, str), 'model_path must be a string'
     assert isinstance(dataset_path, str), 'dataset_path must be a string'
     assert isinstance(img_h, int), 'img_h must be an integer'
     assert isinstance(img_w, int), 'img_w must be an integer'
     assert save_plot in [0, 1], 'save_plot must be either 0 or 1'
+    assert load_random_data in [0, 1], 'load_random_data must be either 0 or 1'
     assert os.path.exists(model_path), 'model_path does not exist'
     assert os.path.exists(dataset_path), 'dataset_path does not exist'
 
@@ -110,7 +112,11 @@ def run_test(
     model = get_model(model_path)
 
     # load dataset
-    test_data = datapipeline(dataset_path, img_h=img_h, img_w=img_w)
+    if load_random_data == 1:
+        test_data = tf.unstack(tf.random.normal([100, 1, img_h, img_w, 3]), axis=0)
+    else:
+        test_data = datapipeline(dataset_path, img_h=img_h, img_w=img_w)
+    
 
     # run test
     results = []
@@ -168,6 +174,13 @@ if __name__ == '__main__':
         default=0,
         help='save plot of original vs enhanced image. 0: no, 1: yes'
     )
+
+    parser.add_argument(
+        '--load_random_data',
+        type=int,
+        default=0,
+        help='load random data. 0: no, 1: yes'
+    )
     args = parser.parse_args()
 
     run_test(
@@ -175,5 +188,6 @@ if __name__ == '__main__':
         dataset_path=args.dataset_path,
         img_h=args.img_h,
         img_w=args.img_w,
-        save_plot=args.save_plot
+        save_plot=args.save_plot,
+        load_random_data=args.load_random_data
     )
