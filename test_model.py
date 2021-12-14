@@ -44,7 +44,7 @@ def get_model(model_path: str):
     tf.print(
         "[info] loading model from disk...."
     )
-    model = models.load_model(model_path)
+    model = models.load_model(model_path, compile=False)
 
     tf.print(
         "loaded model {}".format(model)

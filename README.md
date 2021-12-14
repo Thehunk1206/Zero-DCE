@@ -166,8 +166,9 @@ Example
 ```
 ### Testing the model on the test dataset
 ```
-$ python test_model.py --help
-usage: test_model.py [-h] --model_path MODEL_PATH [--dataset_path DATASET_PATH] [--img_h IMG_H] [--img_w IMG_W]
+$ python test_model.py --help                                                                                                                    
+usage: test_model.py [-h] --model_path MODEL_PATH [--dataset_path DATASET_PATH] [--img_h IMG_H] [--img_w IMG_W] [--save_plot SAVE_PLOT]
+                     [--load_random_data LOAD_RANDOM_DATA]
 
 Test model on test dataset
 
@@ -179,13 +180,19 @@ optional arguments:
                         path to the dataset
   --img_h IMG_H         image height
   --img_w IMG_W         Image width
+  --save_plot SAVE_PLOT
+                        save plot of original vs enhanced image. 0: no, 1: yes
+  --load_random_data LOAD_RANDOM_DATA
+                        load random data. 0: no, 1: yes
 ```
 Example
 ```
 !python test_model.py --model_path Trained_model/zero_dce_lite_iter8/zero_dce_lite_200x300_iter8_60/ \
                       --datset_path lol_datasetv2/ \
-                      --img_h 200 
-                      --img_w 300
+                      --img_h 200 \
+                      --img_w 300 \
+                      --save_plot 1 \
+                      --load_random_data 0
 ```
 ### Inferencing on single image for enhancement
 ```
@@ -249,8 +256,43 @@ $ python single_image_enhance.py --model_path Trained_model/zero_dce_iter6/zero_
 
 ![enhanced_result_with_alpha_maps_zero_dce_512x512_e_60](image_assets/enhanced_result_with_alpha_maps_zero_dce_512x512_e_60.jpg)
 
+## Test Results on out of dataset images
+
+|<img src="sample_images/low_light_chairs.jpg" alt="img" width=400 height=250>|<img src="output/zero_dce_256x256_iter4_60_enhanced_low_light_chairs.jpg" alt="img" width=400 height=250 >|
+|:--:|:--:|
+|low light image|Enhanced Image(Zero-DCE, epoch:60, interation:4)|
+
+|<img src="sample_images/low_light_chairs.jpg" alt="img" width=400 height=250>|<img src="output/zero_dce_512x512_iter6_60_enhanced_low_light_chairs.jpg" alt="img" width=400 height=250 >|
+|:--:|:--:|
+|low light image|Enhanced Image(Zero-DCE, epoch:60, interation:6)|
+
+|<img src="sample_images/low_light_chairs.jpg" alt="img" width=400 height=250>|<img src="output/zero_dce_200x300_iter8_30_enhanced_low_light_chairs.jpg" alt="img" width=400 height=250 >|
+|:--:|:--:|
+|low light image|Enhanced Image(Zero-DCE, epoch:30, interation:8)|
+
+|<img src="sample_images/low_light_outdoor.jpg" alt="img" width=300 height=250>|<img src="output/zero_dce_200x300_iter6_30_enhanced_low_light_outdoor.jpg" alt="img" width=300 height=250 >|
+|:--:|:--:|
+|low light image|Enhanced Image(Zero-DCE, epoch:30, interation:6)|
+
+|<img src="sample_images/low_light_outdoor.jpg" alt="img" width=300 height=250>|<img src="output/zero_dce_lite_200x300_iter8_60_enhanced_low_light_outdoor.jpg" alt="img" width=300 height=250 >|
+|:--:|:--:|
+|low light image|Enhanced Image(Zero-DCE lite, epoch:60, interation:8)|
 
 
+
+|<img src="sample_images/low_light_road_side.jpg" alt="img" width=250 height=400>|<img src="output/zero_dce_200x300_iter8_30_enhanced_low_light_road_side.jpg" alt="img" width=250 height=400 >|
+|:--:|:--:|
+|low light image|Enhanced Image(Zero-DCE, epoch:30, interation:8)|
+
+
+|<img src="sample_images/low_light_road_side.jpg" alt="img" width=250 height=400>|<img src="output/zero_dce_lite_200x300_iter8_60_enhanced_low_light_road_side.jpg" alt="img" width=250 height=400 >|
+|:--:|:--:|
+|low light image|Enhanced Image(Zero-DCE lite, epoch:60, interation:8)|
+
+
+|<img src="sample_images/low_light_pizza.jpeg" alt="img" width=300 height=300>|<img src="output/zero_dce_lite_200x300_iter8_60_enhanced_low_light_pizza.jpg" alt="img" width=300 height=300 >|
+|:--:|:--:|
+|low light image|Enhanced Image(Zero-DCE lite, epoch:60, interation:8)|
 
 
 # Citation
