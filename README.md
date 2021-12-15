@@ -1,14 +1,20 @@
 # Zero-DCE and Zero-DCE++(Lite architechture for Mobile and edge Devices) 
-
 [![TensorFlow](https://img.shields.io/badge/madewith%20TensorFlow-%23FF6F00.svg?style=for-the-badge&logo=TensorFlow&logoColor=white)](https://tensorflow.org)
 [![Keras](https://img.shields.io/badge/Madewith%20Keras-%23D00000.svg?style=for-the-badge&logo=Keras&logoColor=white)](https://keras.io/)
 [![Python](https://img.shields.io/badge/Madewith%20python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)](https://www.python.org/)
 
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/zero-reference-deep-curve-estimation-for-low/low-light-image-enhancement-on-dicm)](https://paperswithcode.com/sota/low-light-image-enhancement-on-dicm?p=zero-reference-deep-curve-estimation-for-low)
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/zero-reference-deep-curve-estimation-for-low/low-light-image-enhancement-on-lime)](https://paperswithcode.com/sota/low-light-image-enhancement-on-lime?p=zero-reference-deep-curve-estimation-for-low)
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/zero-reference-deep-curve-estimation-for-low/low-light-image-enhancement-on-mef)](https://paperswithcode.com/sota/low-light-image-enhancement-on-mef?p=zero-reference-deep-curve-estimation-for-low)
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/zero-reference-deep-curve-estimation-for-low/low-light-image-enhancement-on-npe)](https://paperswithcode.com/sota/low-light-image-enhancement-on-npe?p=zero-reference-deep-curve-estimation-for-low)
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/zero-reference-deep-curve-estimation-for-low/low-light-image-enhancement-on-vv)](https://paperswithcode.com/sota/low-light-image-enhancement-on-vv?p=zero-reference-deep-curve-estimation-for-low)
 
 [![GitHub license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/Thehunk1206/Zero-DCE?style=social)](https://github.com/Thehunk1206/Zero-DCE/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/Thehunk1206/Zero-DCE?style=social)](https://github.com/Thehunk1206/Zero-DCE/network/members)
 [![GitHub watchers](https://img.shields.io/github/watchers/Thehunk1206/Zero-DCE?style=social)](https://github.com/Thehunk1206/Zero-DCE/watchers)
+
+
 
 
 ## Papers Abstract
