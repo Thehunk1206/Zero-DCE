@@ -110,7 +110,7 @@ def train(
     elif model_type == 'zero_dce_lite':
         tf.print('Creating Zero-DCE Lite model...\n')
         model = ZeroDCE_lite(
-            name='DCE-Net lite',
+            name='DCE-Net_lite',
             filters=filters,
             iteration=iteration,
             IMG_H=IMG_H,
