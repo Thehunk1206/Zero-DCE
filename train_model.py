@@ -58,6 +58,7 @@ def train(
     dataset_split:float = 0.05,
     logdir:str = 'logs/',
     iteration:int = 8,
+    filters:int = 32,
     model_type: str = 'zero_dce',
 ):
     assert os.path.isdir(dataset_dir), f'Dataset directory {dataset_dir} is not a directory'
@@ -100,7 +101,7 @@ def train(
         tf.print('Creating Zero-DCE model...\n')
         model = ZeroDCE(
             name='DCE-Net',
-            filters=32,
+            filters=filters,
             iteration=iteration,
             IMG_H=IMG_H,
             IMG_W=IMG_W,
@@ -109,8 +110,8 @@ def train(
     elif model_type == 'zero_dce_lite':
         tf.print('Creating Zero-DCE Lite model...\n')
         model = ZeroDCE_lite(
-            name='DCE-Net',
-            filters=32,
+            name='DCE-Net lite',
+            filters=filters,
             iteration=iteration,
             IMG_H=IMG_H,
             IMG_W=IMG_W,
@@ -197,6 +198,7 @@ def main():
     parser.add_argument('--learning_rate', type=float, default=1e-4, help='Learning rate')
     parser.add_argument('--dataset_split', type=float, default=0.05, help='Dataset split')
     parser.add_argument('--logdir', type=str, default='logs/', help='Log directory')
+    parser.add_argument('--filters', type=int, default=32, help='Number of filters')
     parser.add_argument('--iteration', type=int, default=8, help='Post enhancing iteration')
     args = parser.parse_args()
 
@@ -212,6 +214,7 @@ def main():
         learning_rate=args.learning_rate,
         dataset_split=args.dataset_split,
         logdir=args.logdir,
+        filters=args.filters,
         iteration=args.iteration,
     )
 

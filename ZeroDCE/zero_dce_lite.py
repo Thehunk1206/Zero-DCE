@@ -234,7 +234,7 @@ class ZeroDCE_lite(tf.keras.Model):
 
 if __name__ == "__main__":
     x = tf.random.normal([1, 400, 600, 3])
-    model = ZeroDCE_lite(filters=32, iteration=8, IMG_H=400, IMG_W=600, IMG_C=3)
+    model = ZeroDCE_lite(filters=24, iteration=8, IMG_H=400, IMG_W=600, IMG_C=3)
     tf.print(model.summary(plot=True))
     tf.print(model.get_config())
     y,a_map = model(x)
