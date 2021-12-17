@@ -142,9 +142,9 @@ class ZeroDCE_lite(tf.keras.Model):
         illumination_smoothness_loss: tf.keras.losses.Loss,
         loss_weights: dict = {
             'spatial_consistency_w': 1.0,
-            'exposure_control_w': 10.0,
-            'color_constancy_w': 5.0,
-            'illumination_smoothness_w': 800.0
+            'exposure_control_w': 70.0,
+            'color_constancy_w': 200.0,
+            'illumination_smoothness_w': 1200.0
         },
         **kwargs
     ):

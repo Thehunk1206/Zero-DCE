@@ -94,7 +94,11 @@ def convert_saved_model_to_tflite(model_path:str, output_path:str, data_points:i
     tf.print(f'\nModel converted to {output_path}{model_name}.tflite\n Model size: {file} bytes')
     interpreter = tf.lite.Interpreter(model_content=tflite_model)
     tf.print(interpreter.get_input_details()[0]['dtype'])
+    tf.print(interpreter.get_input_details()[0]['shape'])
     tf.print(interpreter.get_output_details()[0]['dtype'])
+    tf.print(interpreter.get_output_details()[0]['shape'])
+    tf.print(interpreter.get_output_details()[1]['dtype'])
+    tf.print(interpreter.get_output_details()[1]['shape'])
 
 
 def main():

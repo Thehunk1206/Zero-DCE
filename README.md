@@ -121,6 +121,7 @@ lol_datasetv2
 
 0 directories, 500 files
 ```
+Note: The Zero-DCE framework uses no reference image(correnponding enhanced image) to train the DCE-net model, therefore I have used only low light images from the dataset folder.
 ### Dataset link: [LoL-dataset](https://drive.google.com/file/d/157bjO1_cFuSd0HWDUuAmcHRJDVyWpOxB/view)
 
 ## Usage
@@ -132,7 +133,7 @@ lol_datasetv2
 $ python train_model.py --help
 usage: train_model.py [-h] --dataset_dir DATASET_DIR [--checkpoint_dir CHECKPOINT_DIR] [--model_type MODEL_TYPE] [--IMG_H IMG_H]
                       [--IMG_W IMG_W] [--IMG_C IMG_C] [--batch_size BATCH_SIZE] [--epoch EPOCH] [--learning_rate LEARNING_RATE]
-                      [--dataset_split DATASET_SPLIT] [--logdir LOGDIR] [--iteration ITERATION]
+                      [--dataset_split DATASET_SPLIT] [--logdir LOGDIR] [--filters FILTERS] [--iteration ITERATION]
 
 Model training scipt for Zero-DCE models
 
@@ -155,6 +156,7 @@ optional arguments:
   --dataset_split DATASET_SPLIT
                         Dataset split
   --logdir LOGDIR       Log directory
+  --filters FILTERS     Number of filters
   --iteration ITERATION
                         Post enhancing iteration
 ```
@@ -166,7 +168,9 @@ Example
                       --IMG_H 512 \
                       --IMG_W 512 \
                       --epoch 60 \
-                      --batch_size 4 \ 
+                      --batch_size 4 \
+                      -- learning_rate 0.0001\
+                      --filters 32 \ 
                       --iteration 6 \
 ```
 ### Testing the model on the test dataset
@@ -230,6 +234,34 @@ $ python single_image_enhance.py --model_path Trained_model/zero_dce_iter6/zero_
                                 --save_result 1 \
                                 --iteration 6 \
 ```
+### Convert tensorflow SavedModel to tflite model
+```
+$ python convert_to_tflite.py --help                                                                                    
+usage: convert_to_tflite.py [-h] --model_path MODEL_PATH [--output_path OUTPUT_PATH] [--data_points DATA_POINTS]
+                            [--num_threads NUM_THREADS] [--quantize {0,1}]
+
+Convert saved model to tflite
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --model_path MODEL_PATH
+                        Path to saved model
+  --output_path OUTPUT_PATH
+                        Path to output tflite model
+  --data_points DATA_POINTS
+                        Number of data points to test
+  --num_threads NUM_THREADS
+                        Number of threads to use
+  --quantize {0,1}      Quantize model, 0: Do not Quantize, 1: Quantize
+```
+Example
+```
+$ python convert_to_tflite.py --model_path Trained_model/zero_dce_lite_iter8/zero_dce_lite_160x160_iter8_30 \
+                              --out_path TFLITE_model/
+                              --data_points 200
+                              --num_threads 4
+                              --quantize 0
+```
 
 # Visual Results
 
@@ -243,7 +275,7 @@ $ python single_image_enhance.py --model_path Trained_model/zero_dce_iter6/zero_
 ![test_image_plot_zero_dce_iter6_30.png](image_assets/test_image_plot_zero_dce_iter6_30.png)
 
 
-### 3.Model: Zero-DCE, Epoch:30, Inout size: 200x300, Iteration:8, Average Time: CPU-170.0 ms
+### 3.Model: Zero-DCE, Epoch:30, Input size: 200x300, Iteration:8, Average Time: CPU-170.0 ms
 ![test_image_plot_zero_dce_iter8_30](image_assets/test_image_plot_zero_dce_iter8_30.png)
 
 
@@ -252,15 +284,17 @@ $ python single_image_enhance.py --model_path Trained_model/zero_dce_iter6/zero_
 
 
 ### 5.Model: Zero-DCE Lite, Epoch:60, Input size: 200x300, Iteration:8, Average Time: CPU-90 ms
-![test_image_plot_zero_dce_lite_iter8](image_assets/test_image_plot_zero_dce_lite_iter8.png)
+![test_image_plot_zero_dce_lite_iter8](image_assets/test_image_plot_zero_dce_lite_200x300_iter8_60.png)
 
-
+### 6.Model: Zero-DCE Lite(lightest model), Epoch:30, Input size: 160x160, Iteration:8, Average Time: CPU-20 ms
+![test_image_plot_zero_dce_lite_160x160_iter8_30](image_assets/test_image_plot_zero_dce_lite_160x160_iter8_30.png)
 
 ## Enhance Image with its Alpha Maps.(Curve Parameter Maps)
 ![enhanced_result_with_alpha_maps_zero_dce_100](image_assets/enhanced_result_with_alpha_maps_zero_dce_100.jpg)
 
 ![enhanced_result_with_alpha_maps_zero_dce_512x512_e_60](image_assets/enhanced_result_with_alpha_maps_zero_dce_512x512_e_60.jpg)
 
+![enhanced_result_with_alpha_maps_zero_dce_lite_160x160_iter8_30](image_assets/enhanced_result_with_alpha_maps_zero_dce_lite_160x160_iter8_30.jpeg)
 ## Test Results on out of dataset images
 
 |<img src="sample_images/low_light_chairs.jpg" alt="img" width=400 height=250>|<img src="output/zero_dce_256x256_iter4_60_enhanced_low_light_chairs.jpg" alt="img" width=400 height=250 >|
@@ -299,8 +333,32 @@ $ python single_image_enhance.py --model_path Trained_model/zero_dce_iter6/zero_
 |:--:|:--:|
 |low light image|Enhanced Image(Zero-DCE lite, epoch:60, interation:6)|
 
+## Test Results of Zero-DCE-UltraLite model(For Real-Time Low Light Image Enhancement) 
+Input size = 160x160, Iteration = 8, Epoch = 30
+
+|<img src="sample_images/low_light_factoryside.jpeg" alt="img" width=300 height=200>|<img src="output/zero_dce_lite_160x160_iter8_30_enhanced_low_light_factoryside.jpg" alt="img" width=300 height=200 >|
+|:--:|:--:|
+|Low light Image|Enhanced Image|
+
+|<img src="sample_images/low_light_pizza.jpeg" alt="img" width=300 height=300>|<img src="output/zero_dce_lite_160x160_iter8_30_enhanced_low_light_pizza.jpg" alt="img" width=300 height=300 >|
+|:--:|:--:|
+|Low light Image|Enhanced Image|
+
+|<img src="sample_images/low_light_road_side.jpg" alt="img" width=300 height=400>|<img src="output/zero_dce_lite_160x160_iter8_30_enhanced_low_light_road_side.jpg" alt="img" width=300 height=400 >|
+|:--:|:--:|
+|Low light Image|Enhanced Image|
+
+|<img src="sample_images/low_light_sunrise.jpg" alt="img" width=400 height=250>|<img src="output/zero_dce_lite_160x160_iter8_30_enhanced_low_light_sunrise.jpg" alt="img" width=400 height=250 >|
+|:--:|:--:|
+|Low light Image|Enhanced Image|
+
+
 # Best SavedModel for Zero-DCE and Zero-DCE Lite
-## Releasing soon
+### Zero-DCE: [SavedModel](Trained_model/zero_dce_iter8/zero_dce_200x300_iter8_30)
+
+### Zero-DCE-Lite: [SavedModel](Trained_model/zero_dce_lite_iter8/zero_dce_lite_200x300_iter8_60), [Tflite](TFLITE_models/zero_dce_lite_200x300_iter8_60.tflite)  
+
+### Zero-DCE-UltraLite(For real-time enhancement on Mobile devices): [SavedModel](Trained_model/zero_dce_lite_iter8/zero_dce_lite_160x160_iter8_30), [TFlite](TFLITE_models/zero_dce_lite_160x160_iter8_30.tflite)
 
 # Demo Apllication
 ## Mobile Demo application of our trained model is comming soon

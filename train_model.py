@@ -92,7 +92,7 @@ def train(
 
     # Instantiating Losses
     spatial_consistency_loss = SpatialConsistencyLoss()
-    exposure_control_loss = ExposureControlLoss(e=0.55, patch_size=16)
+    exposure_control_loss = ExposureControlLoss(e=0.6, patch_size=8)
     color_constancy_loss = ColorConstancyLosss()
     illumination_smoothness_loss = IlluminationSmoothnessLoss()
 
