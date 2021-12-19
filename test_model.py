@@ -36,20 +36,22 @@ import matplotlib.gridspec as gridspec
 
 from ZeroDCE.dataset import TfdataPipeline
 
+from command_line_scripts.utils import get_model
+
 tf.random.set_seed(42)
 
-def get_model(model_path: str):
-    assert isinstance(model_path, str) , 'model_path must be a string'
+# def get_model(model_path: str):
+#     assert isinstance(model_path, str) , 'model_path must be a string'
 
-    tf.print(
-        "[info] loading model from disk...."
-    )
-    model = models.load_model(model_path, compile=False)
+#     tf.print(
+#         "[info] loading model from disk...."
+#     )
+#     model = models.load_model(model_path, compile=False)
 
-    tf.print(
-        "loaded model {}".format(model)
-    )
-    return model
+#     tf.print(
+#         "loaded model {}".format(model)
+#     )
+#     return model
 
 
 def datapipeline(dataset_path: str, img_h: int = 128, img_w:int = 256) -> tf.data.Dataset:
@@ -138,7 +140,7 @@ def run_test(
     if save_plot == 1:
         plot_image(img=inputs[:5], enhanced_img=results[:5], model_name=model_name, save_fig=save_plot)
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser(
         description='Test model on test dataset'
     )
@@ -191,3 +193,6 @@ if __name__ == '__main__':
         save_plot=args.save_plot,
         load_random_data=args.load_random_data
     )
+
+if __name__ == '__main__':
+    main()

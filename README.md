@@ -128,7 +128,7 @@ Note: The Zero-DCE framework uses no reference image(correnponding enhanced imag
 * Clone this github [repo](https://github.com/Thehunk1206/Zero-DCE)
 * Run ```$pip install -r requirements.txt``` to install required python packgages.
 
-### For training the model, run following
+### **For training the model, run following**
 ```
 $ python train_model.py --help
 usage: train_model.py [-h] --dataset_dir DATASET_DIR [--checkpoint_dir CHECKPOINT_DIR] [--model_type MODEL_TYPE] [--IMG_H IMG_H]
@@ -173,7 +173,7 @@ Example
                       --filters 32 \ 
                       --iteration 6 \
 ```
-### Testing the model on the test dataset
+### **Testing the model on the test dataset**
 ```
 $ python test_model.py --help                                                                                                                    
 usage: test_model.py [-h] --model_path MODEL_PATH [--dataset_path DATASET_PATH] [--img_h IMG_H] [--img_w IMG_W] [--save_plot SAVE_PLOT]
@@ -203,7 +203,7 @@ Example
                       --save_plot 1 \
                       --load_random_data 0
 ```
-### Inferencing on single image for enhancement
+### **Inferencing on single image for enhancement**
 ```
 $ python single_image_enhance.py --help                                                                                      
 usage: single_image_enhance.py [-h] --model_path MODEL_PATH --image_path IMAGE_PATH [--img_h IMG_H] [--img_w IMG_W] [--plot PLOT] [--save_result SAVE_RESULT] [--iteration ITERATION]
@@ -234,7 +234,7 @@ $ python single_image_enhance.py --model_path Trained_model/zero_dce_iter6/zero_
                                 --save_result 1 \
                                 --iteration 6 \
 ```
-### Convert tensorflow SavedModel to tflite model
+### **Convert tensorflow SavedModel to tflite model**
 ```
 $ python convert_to_tflite.py --help                                                                                    
 usage: convert_to_tflite.py [-h] --model_path MODEL_PATH [--output_path OUTPUT_PATH] [--data_points DATA_POINTS]
@@ -261,6 +261,57 @@ $ python convert_to_tflite.py --model_path Trained_model/zero_dce_lite_iter8/zer
                               --data_points 200
                               --num_threads 4
                               --quantize 0
+```
+
+### **Run tflite model on single image**
+```
+$ python command_line_scripts/single_image_enhance_tflite.py --help
+usage: single_image_enhance_tflite.py [-h] [--tflite_path TFLITE_PATH] [--img_path IMG_PATH] [--iteration ITERATION] [--plot PLOT] [--save_result SAVE_RESULT]
+
+Run inference on a single image.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --tflite_path TFLITE_PATH
+                        path to tflite model
+  --img_path IMG_PATH   path to image file
+  --iteration ITERATION
+                        number of Post Ehnancing iterations
+  --plot PLOT           plot enhanced image. 0: no plot, 1: plot
+  --save_result SAVE_RESULT
+                        save enhanced image. 0: no save, 1: save
+```
+Example
+```
+$ python command_line_scripts/single_image_enhance_tflite.py --tflite_path ./TFLITE_models/zero_dce_lite_f16_160x160_iter8_30.tflite \
+                                                            --img_path ./sample_images/low_light_pizza.jpeg \
+                                                            --plot 1 \
+                                                            --save_result 0
+```
+### **Run inference on video**
+```
+$ python command_line_scripts/enhance_low_light_video.py --helpusage: enhance_low_light_video.py [-h] --model_path MODEL_PATH [--video_path VIDEO_PATH] [--img_h IMG_H] [--img_w IMG_W] [--iteration ITERATION]
+
+Zero DCE model
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --model_path MODEL_PATH
+                        Path to the model file
+  --video_path VIDEO_PATH
+                        Path to the video file. If not given the camera will be used
+  --img_h IMG_H         Image height
+  --img_w IMG_W         Image width
+  --iteration ITERATION
+                        Number of post enhancing iterations
+```
+example
+```
+$ python command_line_scripts/enhance_low_light_video.py --model_path ./Trained_model/zero_dce_lite_iter8/zero_dce_lite_160x160_iter8_30 \
+                                                        --video ./sample_images/low_ligh_video_cliped.mp4 \
+                                                        --img_h 160 \ 
+                                                        --img_w 160 \
+                                                        --iteration 8
 ```
 
 # Visual Results
