@@ -291,7 +291,7 @@ $ python command_line_scripts/single_image_enhance_tflite.py --tflite_path ./TFL
 ### **Run inference on video**
 ```
 $ python command_line_scripts/enhance_low_light_video.py --help                                                                                                                                                       
-usage: enhance_low_light_video.py [-h] --model_path MODEL_PATH [--video_path VIDEO_PATH] [--img_h IMG_H] [--img_w IMG_W] [--iteration ITERATION] [--downsample_factor DOWNSAMPLE_FACTOR] [--show_ogframe]
+usage: enhance_low_light_video.py [-h] --model_path MODEL_PATH [--video_path VIDEO_PATH] [--img_h IMG_H] [--img_w IMG_W] [--downsample_factor DOWNSAMPLE_FACTOR] [--show_ogframe]
 
 Zero DCE model
 
@@ -423,6 +423,15 @@ Input size = 160x160, Iteration = 8, Epoch = 30
 * [Learning to Enhance Low-Light Image
 via Zero-Reference Deep Curve Estimation (Zero-DCE++)](https://arxiv.org/pdf/2103.00860.pdf)
 * [A Basic Introduction to Separable Convolutions](https://towardsdatascience.com/a-basic-introduction-to-separable-convolutions-b99ec3102728)
+
+# Contact
+  [![Github](https://img.shields.io/badge/Github-black?style=flat&logo=github)](https://github.com/Thehunk1206/)
+
+  [![LinkedIn](https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin&labelColor=blue)](https://www.linkedin.com/in/tauhid-khan-24bb45177/)
+
+  ![Twitter](https://img.shields.io/twitter/follow/KhanTauhid8?style=social)
+  
+  [![Gmail](https://img.shields.io/badge/Gmail-mail2tauhidkhan@gmail.com-red?style=flat&logo=gmail)](mailto:mail2tauhidkhan@gmail.com)
 
 
 # Citation
