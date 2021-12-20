@@ -101,8 +101,10 @@ def post_enhance_iteration(original_image:tf.Tensor, alpha_maps:tf.Tensor, itera
     '''
     assert isinstance(original_image, tf.Tensor) , 'original_image must be a tensor'
     assert isinstance(alpha_maps, tf.Tensor) , 'alpha_maps must be a tensor'
-    assert iteration > 0 and iteration < 10, 'iteration must be between 1 and 10'
+    assert iteration < 10, 'iteration must be between 1 and 10'
 
+    if iteration == 0:
+        iteration = 1
     # Check if image and alpha map has batch dimension
     if original_image.shape.rank == 4:
         original_image = tf.squeeze(original_image, axis=0)

@@ -290,7 +290,8 @@ $ python command_line_scripts/single_image_enhance_tflite.py --tflite_path ./TFL
 ```
 ### **Run inference on video**
 ```
-$ python command_line_scripts/enhance_low_light_video.py --helpusage: enhance_low_light_video.py [-h] --model_path MODEL_PATH [--video_path VIDEO_PATH] [--img_h IMG_H] [--img_w IMG_W] [--iteration ITERATION]
+$ python command_line_scripts/enhance_low_light_video.py --help                                                                                                                                                       
+usage: enhance_low_light_video.py [-h] --model_path MODEL_PATH [--video_path VIDEO_PATH] [--img_h IMG_H] [--img_w IMG_W] [--downsample_factor DOWNSAMPLE_FACTOR] [--show_ogframe]
 
 Zero DCE model
 
@@ -302,8 +303,9 @@ optional arguments:
                         Path to the video file. If not given the camera will be used
   --img_h IMG_H         Image height
   --img_w IMG_W         Image width
-  --iteration ITERATION
-                        Number of post enhancing iterations
+  --downsample_factor DOWNSAMPLE_FACTOR
+                        Downsample factor
+  --show_ogframe        Show original frame
 ```
 example
 ```
@@ -311,7 +313,8 @@ $ python command_line_scripts/enhance_low_light_video.py --model_path ./Trained_
                                                         --video ./sample_images/low_ligh_video_cliped.mp4 \
                                                         --img_h 160 \ 
                                                         --img_w 160 \
-                                                        --iteration 8
+                                                        --downsample_factor 0.8
+                                                        --show_ogframe 
 ```
 
 # Visual Results

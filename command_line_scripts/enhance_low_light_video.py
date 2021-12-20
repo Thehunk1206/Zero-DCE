@@ -37,7 +37,7 @@ from utils import get_model, post_enhance_iteration
 
 def process_frame(in_frame: np.ndarray, img_h:int = 160, img_w:int = 160) -> tf.Tensor:
     assert isinstance(in_frame, np.ndarray)
-
+    
     frame = tf.convert_to_tensor(in_frame, dtype=tf.float32)
     frame = tf.image.resize(frame, (img_h, img_w), method=tf.image.ResizeMethod.BICUBIC)
     frame = frame / 255.0
@@ -46,13 +46,14 @@ def process_frame(in_frame: np.ndarray, img_h:int = 160, img_w:int = 160) -> tf.
     return frame
 
 
-def run_video_inference(model_path:str, video_path:str="__camera__" , img_h:int = 160, img_w = 160, iteration:int = 6):
+def run_video_inference(model_path:str, video_path:str="__camera__" , img_h:int = 160, img_w = 160, downsample_factor:int = 1.0, show_original_frame:bool = False):
+    assert 0.1 <= downsample_factor <= 1.0 
 
     zero_dce_model =  get_model(model_path)
 
     # Read video
     if video_path == "__camera__":
-        cap = cv.VideoCapture(0)
+        cap = cv.VideoCapture(2)
     else:
         assert os.path.exists(video_path), "Video file not found"
         cap = cv.VideoCapture(video_path)
@@ -67,17 +68,49 @@ def run_video_inference(model_path:str, video_path:str="__camera__" , img_h:int 
         print(f'Frame size: {frame_width}x{frame_height}')
         print('Frames per second : ', fps, 'FPS')
     
+    # constants for fps calculation
+    font = cv.FONT_HERSHEY_SIMPLEX
+    PREV_FRAME_TIME = 0
+    NEW_TIME_FRAME = 0
+    
+    # Creating a Trackbar for post enhancing iteration value change.
+    cv.namedWindow('Set Post Enhancing iteration')
+    cv.resizeWindow('Set Post Enhancing iteration', 300, 100)
+    cv.createTrackbar('iteration', 'Set Post Enhancing iteration', 1, 9, lambda x: None)
+    cv.setTrackbarPos('iteration', 'Set Post Enhancing iteration', 6)
+
     while (cap.isOpened()):
         ret, frame = cap.read()
 
         if ret:
             frame = cv.flip(frame,1)
+            frame = cv.resize(frame, (int(frame_width*downsample_factor), int(frame_height*downsample_factor)), interpolation = cv.INTER_CUBIC)
+
             input_frame = process_frame(frame, img_h=img_h, img_w=img_w)
             frame = tf.convert_to_tensor((frame/255.0), dtype=tf.float32)
             _, a_maps = zero_dce_model(input_frame)
-            enhanced_frame = post_enhance_iteration(frame, a_maps, iteration=iteration)
-            cv.imshow('frame', enhanced_frame.numpy())
-            # cv.imshow('low_light_frame', frame.numpy())
+
+            a_maps = tf.squeeze(a_maps, axis=0)
+            a_maps = cv.GaussianBlur(a_maps.numpy(), (5,5), 0)
+            a_maps = tf.cast(a_maps, dtype=tf.float32)
+            enhanced_frame = post_enhance_iteration(frame, a_maps, iteration=cv.getTrackbarPos('iteration', 'Set Post Enhancing iteration'))
+
+            # get numpy array from tensor
+            enhanced_frame = enhanced_frame.numpy()
+            frame = frame.numpy()
+
+            # Calculating and displaying FPS
+            NEW_TIME_FRAME = time()
+            if (NEW_TIME_FRAME - PREV_FRAME_TIME) > 0:
+                fps = 1.0 / (NEW_TIME_FRAME - PREV_FRAME_TIME)
+                PREV_FRAME_TIME = NEW_TIME_FRAME
+            else:   
+                fps = 0.0
+            cv.putText(enhanced_frame, f"FPS: {int(fps)}", (7,20), font, 0.5, (0,0,255), 1, cv.LINE_AA)
+
+            cv.imshow('frame', enhanced_frame)
+            if show_original_frame:
+                cv.imshow('low_light_frame', frame)
             
 
         else:
@@ -85,6 +118,8 @@ def run_video_inference(model_path:str, video_path:str="__camera__" , img_h:int 
 
         if cv.waitKey(1) & 0xFF == ord('q'):
             break
+    cap.release()
+    cv.destroyAllWindows()
 
 # main function that created command line arguments and runs the video inference
 def main():
@@ -94,7 +129,8 @@ def main():
     parser.add_argument('--video_path', type=str, default='__camera__',help='Path to the video file. If not given the camera will be used')
     parser.add_argument('--img_h', type=int, default=160, help='Image height')
     parser.add_argument('--img_w', type=int, default=160, help='Image width')
-    parser.add_argument('--iteration', type=int, default=8, help='Number of post enhancing iterations')
+    parser.add_argument('--downsample_factor', type=float, default=1.0, help='Downsample factor')
+    parser.add_argument('--show_ogframe', action='store_true', help='Show original frame')
     args = parser.parse_args()
 
     run_video_inference(
@@ -102,7 +138,8 @@ def main():
         video_path=args.video_path,
         img_h=args.img_h,
         img_w=args.img_w,
-        iteration=args.iteration
+        downsample_factor=args.downsample_factor,
+        show_original_frame=args.show_ogframe
     )
 
 
