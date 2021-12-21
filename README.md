@@ -471,5 +471,5 @@ Dataset
 } 
 ```
 If you like this work drop a :star: 
-Any query or want to collaborate? Drop a mail :mail: at mail2tauhidkhan@gmail.com
+Any query or want to collaborate? Drop a mail 📧 at mail2tauhidkhan@gmail.com
 
