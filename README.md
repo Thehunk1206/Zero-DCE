@@ -14,7 +14,10 @@
 [![GitHub forks](https://img.shields.io/github/forks/Thehunk1206/Zero-DCE?style=social)](https://github.com/Thehunk1206/Zero-DCE/network/members)
 [![GitHub watchers](https://img.shields.io/github/watchers/Thehunk1206/Zero-DCE?style=social)](https://github.com/Thehunk1206/Zero-DCE/watchers)
 
-
+[![Github](https://img.shields.io/badge/Github-black?style=flat&logo=github)](https://github.com/Thehunk1206/)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin&labelColor=blue)](https://www.linkedin.com/in/tauhid-khan-24bb45177/)
+![Twitter](https://img.shields.io/twitter/follow/KhanTauhid8?style=social)
+[![Gmail](https://img.shields.io/badge/Gmail-mail2tauhidkhan@gmail.com-red?style=flat&logo=gmail)](mailto:mail2tauhidkhan@gmail.com)
 
 
 ## Papers Abstract
@@ -424,15 +427,6 @@ Input size = 160x160, Iteration = 8, Epoch = 30
 via Zero-Reference Deep Curve Estimation (Zero-DCE++)](https://arxiv.org/pdf/2103.00860.pdf)
 * [A Basic Introduction to Separable Convolutions](https://towardsdatascience.com/a-basic-introduction-to-separable-convolutions-b99ec3102728)
 
-# Contact
-  [![Github](https://img.shields.io/badge/Github-black?style=flat&logo=github)](https://github.com/Thehunk1206/)
-
-  [![LinkedIn](https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin&labelColor=blue)](https://www.linkedin.com/in/tauhid-khan-24bb45177/)
-
-  ![Twitter](https://img.shields.io/twitter/follow/KhanTauhid8?style=social)
-  
-  [![Gmail](https://img.shields.io/badge/Gmail-mail2tauhidkhan@gmail.com-red?style=flat&logo=gmail)](mailto:mail2tauhidkhan@gmail.com)
-
 
 # Citation
 Paper: Zero-DCE
@@ -476,5 +470,6 @@ Dataset
 
 } 
 ```
-
+If you like this work drop a :star: 
+Any query or want to collaborate? Drop a mail :mail: at mail2tauhidkhan@gmail.com
 
