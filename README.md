@@ -414,11 +414,11 @@ Input size = 160x160, Iteration = 8, Epoch = 30
 https://user-images.githubusercontent.com/45728323/146875651-415f95f3-1eb7-4e4b-91e3-b075e8b34cc5.mp4
 
 # Best SavedModel for Zero-DCE and Zero-DCE Lite
-### Zero-DCE: [SavedModel](Trained_model/zero_dce_iter8/zero_dce_200x300_iter8_30)
+### Zero-DCE: [SavedModel](https://github.com/Thehunk1206/Zero-DCE/tree/master/Trained_model/zero_dce_iter8/zero_dce_200x300_iter8_30)
 
-### Zero-DCE-Lite: [SavedModel](Trained_model/zero_dce_lite_iter8/zero_dce_lite_200x300_iter8_60), [Tflite](TFLITE_models/zero_dce_lite_200x300_iter8_60.tflite)  
+### Zero-DCE-Lite: [SavedModel](https://github.com/Thehunk1206/Zero-DCE/tree/master/Trained_model/zero_dce_lite_iter8/zero_dce_lite_200x300_iter8_60), [Tflite](https://github.com/Thehunk1206/Zero-DCE/blob/master/TFLITE_models/zero_dce_lite_200x300_iter8_60.tflite)  
 
-### Zero-DCE-UltraLite(For real-time enhancement on Mobile devices): [SavedModel](Trained_model/zero_dce_lite_iter8/zero_dce_lite_160x160_iter8_30), [TFlite](TFLITE_models/zero_dce_lite_160x160_iter8_30.tflite)
+### Zero-DCE-UltraLite(For real-time enhancement on Mobile devices): [SavedModel](https://github.com/Thehunk1206/Zero-DCE/tree/master/Trained_model/zero_dce_lite_iter8/zero_dce_lite_160x160_iter8_30), [TFlite](https://github.com/Thehunk1206/Zero-DCE/blob/master/TFLITE_models/zero_dce_lite_160x160_iter8_30.tflite)
 
 # Demo Apllication
 ## Mobile Demo application of our trained model is comming soon
