@@ -1,4 +1,4 @@
-# Zero-DCE and Zero-DCE++(Lite architechture for Mobile and edge Devices) 
+# Zero-DCE and Zero-DCE++(Lite architechture for Mobile and edge Devices) [![Twitter](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2FThehunk1206%2FZero-DCE)](https://twitter.com/intent/tweet?text=checkout%20this%20implementation%20of%20Zero-DCE:&url=https%3A%2F%2Fgithub.com%2FThehunk1206%2FZero-DCE)
 [![TensorFlow](https://img.shields.io/badge/madewith%20TensorFlow-%23FF6F00.svg?style=for-the-badge&logo=TensorFlow&logoColor=white)](https://tensorflow.org)
 [![Keras](https://img.shields.io/badge/Madewith%20Keras-%23D00000.svg?style=for-the-badge&logo=Keras&logoColor=white)](https://keras.io/)
 [![Python](https://img.shields.io/badge/Madewith%20python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)](https://www.python.org/)
