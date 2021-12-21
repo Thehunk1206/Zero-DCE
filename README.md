@@ -50,6 +50,9 @@ via Zero-Reference Deep Curve Estimation (Zero-DCE++)](https://arxiv.org/pdf/210
 Check out the original Pytorch Implementation of Zero-DCE [here](https://github.com/Li-Chongyi/Zero-DCE)
 and the original Pytorch implementation of Zero-DCE++ [here](https://github.com/Li-Chongyi/Zero-DCE_extension)
 
+## Low Light Video Enhancement Demo
+
+https://user-images.githubusercontent.com/45728323/146875651-415f95f3-1eb7-4e4b-91e3-b075e8b34cc5.mp4
 
 ## Proposed Zero-DCE Framework
 ![Proposed Zero-DCE Framework](image_assets/Proposed_Architecture.png)
@@ -408,10 +411,6 @@ Input size = 160x160, Iteration = 8, Epoch = 30
 |<img src="sample_images/low_light_sunrise.jpg" alt="img" width=400 height=250>|<img src="output/zero_dce_lite_160x160_iter8_30_enhanced_low_light_sunrise.jpg" alt="img" width=400 height=250 >|
 |:--:|:--:|
 |Low light Image|Enhanced Image|
-
-## Low Light Video Enhancement Demo
-
-https://user-images.githubusercontent.com/45728323/146875651-415f95f3-1eb7-4e4b-91e3-b075e8b34cc5.mp4
 
 # Best SavedModel for Zero-DCE and Zero-DCE Lite
 ### Zero-DCE: [SavedModel](https://github.com/Thehunk1206/Zero-DCE/tree/master/Trained_model/zero_dce_iter8/zero_dce_200x300_iter8_30)
