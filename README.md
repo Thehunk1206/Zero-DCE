@@ -52,6 +52,7 @@ and the original Pytorch implementation of Zero-DCE++ [here](https://github.com/
 
 ## Low Light Video Enhancement Demo
 For better experience, watch demo video in full screen mode. 
+
 https://user-images.githubusercontent.com/45728323/146875651-415f95f3-1eb7-4e4b-91e3-b075e8b34cc5.mp4
 
 ## Proposed Zero-DCE Framework
