@@ -93,11 +93,12 @@ def run_video_inference(model_path:str, video_path:str="__camera__" , img_h:int 
             a_maps = tf.squeeze(a_maps, axis=0)
             a_maps = cv.GaussianBlur(a_maps.numpy(), (5,5), 0)
             a_maps = tf.cast(a_maps, dtype=tf.float32)
-            enhanced_frame = post_enhance_iteration(frame, a_maps, iteration=cv.getTrackbarPos('iteration', 'Set Post Enhancing iteration'))
+            post_enh_iteration = cv.getTrackbarPos('iteration', 'Set Post Enhancing iteration')
+            enhanced_frame = post_enhance_iteration(frame, a_maps, iteration=post_enh_iteration)
 
             # get numpy array from tensor
             enhanced_frame = enhanced_frame.numpy()
-            frame = frame.numpy()
+            frame = (frame.numpy()*255.0).astype(np.uint8)
 
             # Calculating and displaying FPS
             NEW_TIME_FRAME = time()
@@ -106,12 +107,14 @@ def run_video_inference(model_path:str, video_path:str="__camera__" , img_h:int 
                 PREV_FRAME_TIME = NEW_TIME_FRAME
             else:   
                 fps = 0.0
-            cv.putText(enhanced_frame, f"FPS: {int(fps)}", (7,20), font, 0.5, (0,0,255), 1, cv.LINE_AA)
+            show_verbose = f'enhanced_output FPS: {int(fps)} post_enhancing_iteration: {post_enh_iteration}'
+            cv.putText(enhanced_frame, show_verbose, (7,20), font, 0.5, (0,0,255), 1, cv.LINE_AA)
+            cv.putText(frame, "low_light_input", (7,20), font, 0.5, (0,0,255), 1, cv.LINE_AA)
 
-            cv.imshow('frame', enhanced_frame)
-            if show_original_frame:
-                cv.imshow('low_light_frame', frame)
-            
+            # Combine both frames
+            combined_frame = np.concatenate((frame, enhanced_frame), axis=1)
+
+            cv.imshow('frame', combined_frame)
 
         else:
             break
