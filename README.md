@@ -1,4 +1,4 @@
-# Zero-DCE and Zero-DCE++(Lite architechture for Mobile and edge Devices) 
+# Zero-DCE and Zero-DCE++(Lite architechture for Mobile and edge Devices) [![Twitter](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2FThehunk1206%2FZero-DCE)](https://twitter.com/intent/tweet?text=checkout%20this%20implementation%20of%20Zero-DCE:&url=https%3A%2F%2Fgithub.com%2FThehunk1206%2FZero-DCE)
 [![TensorFlow](https://img.shields.io/badge/madewith%20TensorFlow-%23FF6F00.svg?style=for-the-badge&logo=TensorFlow&logoColor=white)](https://tensorflow.org)
 [![Keras](https://img.shields.io/badge/Madewith%20Keras-%23D00000.svg?style=for-the-badge&logo=Keras&logoColor=white)](https://keras.io/)
 [![Python](https://img.shields.io/badge/Madewith%20python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)](https://www.python.org/)
@@ -9,7 +9,7 @@
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/zero-reference-deep-curve-estimation-for-low/low-light-image-enhancement-on-npe)](https://paperswithcode.com/sota/low-light-image-enhancement-on-npe?p=zero-reference-deep-curve-estimation-for-low)
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/zero-reference-deep-curve-estimation-for-low/low-light-image-enhancement-on-vv)](https://paperswithcode.com/sota/low-light-image-enhancement-on-vv?p=zero-reference-deep-curve-estimation-for-low)
 
-[![GitHub license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+[![GitHub license](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/Thehunk1206/Zero-DCE?style=social)](https://github.com/Thehunk1206/Zero-DCE/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/Thehunk1206/Zero-DCE?style=social)](https://github.com/Thehunk1206/Zero-DCE/network/members)
 [![GitHub watchers](https://img.shields.io/github/watchers/Thehunk1206/Zero-DCE?style=social)](https://github.com/Thehunk1206/Zero-DCE/watchers)
@@ -50,6 +50,10 @@ via Zero-Reference Deep Curve Estimation (Zero-DCE++)](https://arxiv.org/pdf/210
 Check out the original Pytorch Implementation of Zero-DCE [here](https://github.com/Li-Chongyi/Zero-DCE)
 and the original Pytorch implementation of Zero-DCE++ [here](https://github.com/Li-Chongyi/Zero-DCE_extension)
 
+## Low Light Video Enhancement Demo
+For better experience, watch demo video in full screen mode. 
+
+https://user-images.githubusercontent.com/45728323/146875651-415f95f3-1eb7-4e4b-91e3-b075e8b34cc5.mp4
 
 ## Proposed Zero-DCE Framework
 ![Proposed Zero-DCE Framework](image_assets/Proposed_Architecture.png)
@@ -409,16 +413,12 @@ Input size = 160x160, Iteration = 8, Epoch = 30
 |:--:|:--:|
 |Low light Image|Enhanced Image|
 
-## Low Light Video Enhancement Demo
-
-https://user-images.githubusercontent.com/45728323/146875651-415f95f3-1eb7-4e4b-91e3-b075e8b34cc5.mp4
-
 # Best SavedModel for Zero-DCE and Zero-DCE Lite
-### Zero-DCE: [SavedModel](Trained_model/zero_dce_iter8/zero_dce_200x300_iter8_30)
+### Zero-DCE: [SavedModel](https://github.com/Thehunk1206/Zero-DCE/tree/master/Trained_model/zero_dce_iter8/zero_dce_200x300_iter8_30)
 
-### Zero-DCE-Lite: [SavedModel](Trained_model/zero_dce_lite_iter8/zero_dce_lite_200x300_iter8_60), [Tflite](TFLITE_models/zero_dce_lite_200x300_iter8_60.tflite)  
+### Zero-DCE-Lite: [SavedModel](https://github.com/Thehunk1206/Zero-DCE/tree/master/Trained_model/zero_dce_lite_iter8/zero_dce_lite_200x300_iter8_60), [Tflite](https://github.com/Thehunk1206/Zero-DCE/blob/master/TFLITE_models/zero_dce_lite_200x300_iter8_60.tflite)  
 
-### Zero-DCE-UltraLite(For real-time enhancement on Mobile devices): [SavedModel](Trained_model/zero_dce_lite_iter8/zero_dce_lite_160x160_iter8_30), [TFlite](TFLITE_models/zero_dce_lite_160x160_iter8_30.tflite)
+### Zero-DCE-UltraLite(For real-time enhancement on Mobile devices): [SavedModel](https://github.com/Thehunk1206/Zero-DCE/tree/master/Trained_model/zero_dce_lite_iter8/zero_dce_lite_160x160_iter8_30), [TFlite](https://github.com/Thehunk1206/Zero-DCE/blob/master/TFLITE_models/zero_dce_lite_160x160_iter8_30.tflite)
 
 # Demo Apllication
 ## Mobile Demo application of our trained model is comming soon
