@@ -46,7 +46,7 @@ def process_frame(in_frame: np.ndarray, img_h:int = 160, img_w:int = 160) -> tf.
     return frame
 
 
-def run_video_inference(model_path:str, video_path:str="__camera__" , img_h:int = 160, img_w = 160, downsample_factor:int = 1.0, show_original_frame:bool = False):
+def run_video_inference(model_path:str, video_path:str="__camera__" , img_h:int = 160, img_w = 160, downsample_factor:int = 1.0):
     assert 0.1 <= downsample_factor <= 1.0 
 
     zero_dce_model =  get_model(model_path)
@@ -133,7 +133,6 @@ def main():
     parser.add_argument('--img_h', type=int, default=160, help='Image height')
     parser.add_argument('--img_w', type=int, default=160, help='Image width')
     parser.add_argument('--downsample_factor', type=float, default=1.0, help='Downsample factor')
-    parser.add_argument('--show_ogframe', action='store_true', help='Show original frame')
     args = parser.parse_args()
 
     run_video_inference(
@@ -141,8 +140,7 @@ def main():
         video_path=args.video_path,
         img_h=args.img_h,
         img_w=args.img_w,
-        downsample_factor=args.downsample_factor,
-        show_original_frame=args.show_ogframe
+        downsample_factor=args.downsample_factor
     )
 
 
